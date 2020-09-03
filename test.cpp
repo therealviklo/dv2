@@ -2,7 +2,7 @@
 
 #include "dv2.cpp"
 
-int main()
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
-
+	return 0;
 }
