@@ -25,14 +25,14 @@ Window::WndClass::~WndClass()
 
 void Window::Keyboard::addEvent(Event event) noexcept
 {
-	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), events.size() * sizeof(events[0]));
+	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), (events.size() - 1) * sizeof(events[0]));
 	events[0] = event;
 }
 
 Window::Keyboard::Event Window::Keyboard::getEvent() noexcept
 {
 	Event event = events[events.size() - 1];
-	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), events.size() * sizeof(events[0]));
+	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), (events.size() - 1) * sizeof(events[0]));
 	events[0] = Event();
 	return event;
 }
