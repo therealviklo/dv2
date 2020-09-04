@@ -14,16 +14,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		int k = 0;
 		while (w.exists())
 		{
-			for (Window::Keyboard::Event e = w.keyboard.getEvent();
-				 e.type != Window::Keyboard::Event::Type::Invalid;
-				 e = w.keyboard.getEvent())
+			for (WME e = w.mouse.getEvent(); e.type != WMET_INVALID; e = w.mouse.getEvent())
 			{
-				if (e.key == VK_RETURN && e.type == Window::Keyboard::Event::Type::KeyUp)
+				if (e.type == WMET_LMOUSEDOWN || e.type == WMET_RMOUSEDOWN || e.type == WMET_MMOUSEDOWN)
 				{
-					std::wstringstream ss;
-					ss << (++k);
-					SetWindowTextW(w.getHwnd(), ss.str().c_str());
+					k++;
 				}
+				else if (e.type == WMET_LMOUSEUP || e.type == WMET_RMOUSEUP || e.type == WMET_MMOUSEUP)
+				{
+					k--;
+				}
+				std::wstringstream ss;
+				ss << k;
+				SetWindowTextW(w.getHwnd(), ss.str().c_str());
 			}
 
 			w.update();
