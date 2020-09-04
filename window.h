@@ -44,6 +44,9 @@ public:
 
 	HWND getHwnd() noexcept {return hWnd;}
 	bool exists() const noexcept {return IsWindow(hWnd);}
-};
 
-LRESULT CALLBACK DV2WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	
+	static LRESULT CALLBACK DV2SetupWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK DV2WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+};

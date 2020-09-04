@@ -8,7 +8,7 @@ Window::WndClass::WndClass() noexcept
 	WNDCLASSEXW wndClass = {};
 	wndClass.cbSize = sizeof(wndClass);
 	wndClass.style = CS_OWNDC;
-	wndClass.lpfnWndProc = DV2WndProc;
+	wndClass.lpfnWndProc = DV2SetupWndProc;
 	wndClass.hInstance = GetModuleHandleW(nullptr);
 	wndClass.hCursor = LoadCursorW(GetModuleHandleW(nullptr), reinterpret_cast<const wchar_t*>(IDC_ARROW));
 	wndClass.lpszClassName = className;
@@ -39,7 +39,7 @@ Window::Window(const wchar_t* title, int width, int height)
 		nullptr,
 		nullptr,
 		GetModuleHandleW(nullptr),
-		nullptr
+		this
 	);
 	if (!hWnd) throw Exception("Failed to create window");
 	ShowWindow(hWnd, SW_SHOW);
@@ -60,15 +60,31 @@ void Window::update() noexcept
 	}
 }
 
-LRESULT CALLBACK DV2WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (msg)
-	{
-		case WM_DESTROY:
-		{
-			PostQuitMessage(0);
-		}
-		return 0;
-	}
 	return DefWindowProcW(hWnd, msg, wParam, lParam);
+}
+
+LRESULT CALLBACK Window::DV2SetupWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if (msg != WM_CREATE) return DefWindowProcW(hWnd, msg, wParam, lParam);
+
+	SetLastError(0);
+	if (!SetWindowLongPtrW(
+		hWnd,
+		GWLP_USERDATA,
+		reinterpret_cast<LONG_PTR>(reinterpret_cast<const CREATESTRUCTW* const>(lParam)->lpCreateParams)
+	) && GetLastError()) return -1;
+	if (!SetWindowLongPtrW(
+		hWnd,
+		GWLP_WNDPROC,
+		reinterpret_cast<LONG_PTR>(DV2WndProc)
+	) && GetLastError()) return -1;
+	return 0;
+}
+
+LRESULT CALLBACK Window::DV2WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	Window* const window = reinterpret_cast<Window* const>(GetWindowLongPtrW(hWnd, GWLP_USERDATA));
+	return window->wndProc(hWnd, msg, wParam, lParam);
 }

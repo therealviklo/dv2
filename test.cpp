@@ -21,7 +21,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	}
 	catch (...)
 	{
-		MessageBoxA(nullptr, "Unknown error", "Error", MB_ICONERROR);
+		MessageBoxW(nullptr, L"Unknown error", L"Error", MB_ICONERROR);
 	}
 	return 0;
 }
