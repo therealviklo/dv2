@@ -1,6 +1,6 @@
 #include "window.h"
 
-decltype(Window::wndClass) Window::wndClass;
+const Window::WndClass Window::wndClass;
 
 Window::WndClass::WndClass() noexcept
 	: succeeded(false)
