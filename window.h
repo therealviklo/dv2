@@ -7,7 +7,9 @@
 #endif
 #include <windows.h>
 #include <stdexcept>
-
+#include <bitset>
+#include <array>
+#include <cstdint>
 
 class Window
 {
@@ -34,6 +36,38 @@ private:
 
 	HWND hWnd;
 public:
+	class Keyboard
+	{
+		friend class Window;
+	public:
+		struct Event
+		{
+			uint8_t key;
+			enum struct Type
+			{
+				Invalid,
+				KeyDown,
+				KeyUp
+			} type;
+
+			Event(uint8_t key, Type type) noexcept : key(key), type(type) {}
+			Event() noexcept : key(0), type(Type::Invalid) {}
+		};
+	private:
+		std::bitset<0xff> keyStates;
+		std::array<Event, 16> events;
+
+		void addEvent(Event event) noexcept;
+	public:
+		/* Returnerar det event som står först i kön. Om det inte finns några
+		   event returneras ett event med typen Invalid. */
+		Event getEvent() noexcept;
+		constexpr bool keyDown(uint8_t key) const;
+
+		void clearKeyStates() noexcept {keyStates = decltype(keyStates)();}
+		void clearEvents() noexcept {events = decltype(events)();}
+	} keyboard;
+
 	Window(const wchar_t* title, int width, int height);
 	~Window();
 
@@ -42,7 +76,7 @@ public:
 
 	void update() noexcept;
 
-	HWND getHwnd() noexcept {return hWnd;}
+	constexpr HWND getHwnd() noexcept {return hWnd;}
 	bool exists() const noexcept {return IsWindow(hWnd);}
 
 	LRESULT wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

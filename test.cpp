@@ -1,3 +1,4 @@
+#include <sstream>
 #include "dv2.h"
 #include "window.h"
 
@@ -10,8 +11,21 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	{
 		Window w(L"Test", 500, 500);
 
+		int k = 0;
 		while (w.exists())
 		{
+			for (Window::Keyboard::Event e = w.keyboard.getEvent();
+				 e.type != Window::Keyboard::Event::Type::Invalid;
+				 e = w.keyboard.getEvent())
+			{
+				if (e.key == VK_RETURN && e.type == Window::Keyboard::Event::Type::KeyUp)
+				{
+					std::wstringstream ss;
+					ss << (++k);
+					SetWindowTextW(w.getHwnd(), ss.str().c_str());
+				}
+			}
+
 			w.update();
 		}
 	}
