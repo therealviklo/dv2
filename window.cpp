@@ -172,6 +172,20 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_MMOUSEUP));
 		}
 		return 0;
+		case WM_MOUSEHWHEEL:
+		{
+			mouse.x = GET_X_LPARAM(lParam);
+			mouse.y = GET_Y_LPARAM(lParam);
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_HSCROLL));
+		}
+		return 0;
+		case WM_MOUSEWHEEL:
+		{
+			mouse.x = GET_X_LPARAM(lParam);
+			mouse.y = GET_Y_LPARAM(lParam);
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_VSCROLL));
+		}
+		return 0;
 	}
 	return DefWindowProcW(hWnd, msg, wParam, lParam);
 }

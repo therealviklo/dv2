@@ -16,17 +16,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		{
 			for (WME e = w.mouse.getEvent(); e.type != WMET_INVALID; e = w.mouse.getEvent())
 			{
-				if (e.type == WMET_LMOUSEDOWN || e.type == WMET_RMOUSEDOWN || e.type == WMET_MMOUSEDOWN)
+				if (e.type == WMET_VSCROLL)
 				{
-					k++;
+					k += e.scroll;
+					std::wstringstream ss;
+					ss << k;
+					SetWindowTextW(w.getHwnd(), ss.str().c_str());
 				}
-				else if (e.type == WMET_LMOUSEUP || e.type == WMET_RMOUSEUP || e.type == WMET_MMOUSEUP)
-				{
-					k--;
-				}
-				std::wstringstream ss;
-				ss << k;
-				SetWindowTextW(w.getHwnd(), ss.str().c_str());
 			}
 
 			w.update();

@@ -27,7 +27,9 @@ enum WMET
 	WMET_RMOUSEDOWN,
 	WMET_RMOUSEUP,
 	WMET_MMOUSEDOWN,
-	WMET_MMOUSEUP
+	WMET_MMOUSEUP,
+	WMET_HSCROLL,
+	WMET_VSCROLL
 };
 
 class Window
@@ -89,10 +91,13 @@ public:
 		{
 			int x;
 			int y;
+			// Används bara med WMET_HSCROLL och WMET_VSCROLL.
+			int scroll;
 			WMET type;
 
-			Event(int x, int y, WMET type) noexcept : x(x), y(y), type(type) {}
-			Event() noexcept : x(0), y(0), type(WMET_INVALID) {}
+			Event(int x, int y, int scroll, WMET type) noexcept : x(x), y(y), scroll(scroll), type(type) {}
+			Event(int x, int y, WMET type) noexcept : x(x), y(y), scroll(0), type(type) {}
+			Event() noexcept : x(0), y(0), scroll(0), type(WMET_INVALID) {}
 		};
 	private:
 		int x;
