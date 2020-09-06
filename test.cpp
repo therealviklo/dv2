@@ -10,21 +10,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	try
 	{
 		Window w(L"Test", 500, 500);
+		DV2 dv2(w.getHwnd());
 
 		int k = 0;
 		while (w.exists())
 		{
-			for (WME e = w.mouse.getEvent(); e.type != WMET_INVALID; e = w.mouse.getEvent())
-			{
-				if (e.type == WMET_VSCROLL)
-				{
-					k += e.scroll;
-					std::wstringstream ss;
-					ss << k;
-					SetWindowTextW(w.getHwnd(), ss.str().c_str());
-				}
-			}
+			dv2.clear({1.0f, 0.0f, 0.0f, 1.0f});
 
+			dv2.present();
 			w.update();
 		}
 	}
