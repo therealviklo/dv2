@@ -56,5 +56,7 @@ public:
 	void clear();
 	void clear(Colour clr);
 
+	void test();
+
 	void present();
 };

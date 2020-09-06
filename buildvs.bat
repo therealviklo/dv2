@@ -1,0 +1,1 @@
+@"C:\program files (x86)\windows kits\10\bin\10.0.17763.0\x64\dxc" -E main -T vs_6_3 vertexshader.hlsl > vertexshader.cso
