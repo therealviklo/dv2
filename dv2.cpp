@@ -36,56 +36,31 @@ DV2::DV2(HWND hWnd)
 		nullptr,
 		&context
 	))) throw Exception("Failed to initialise Direct3D 11");
-	try
-	{
-		ID3D11Resource* backBuffer = nullptr;
-		if (FAILED(swap->GetBuffer(
-			0,
-			__uuidof(ID3D11Resource),
-			reinterpret_cast<void**>(&backBuffer)
-		))) throw Exception("Failed to get back buffer");
-		try
-		{
-			if (FAILED(device->CreateRenderTargetView(
-				backBuffer,
-				nullptr,
-				&target
-			))) throw Exception("Failed to create render target view");
-		}
-		catch (...)
-		{
-			safeRelease(backBuffer);
-			throw;
-		}
-		safeRelease(backBuffer);
-	}
-	catch (...)
-	{
-		safeRelease(context);
-		safeRelease(swap);
-		safeRelease(device);
-		throw;
-	}
-}
 
-DV2::~DV2()
-{
-	safeRelease(target);
-	safeRelease(context);
-	safeRelease(swap);
-	safeRelease(device);
+	ID3D11Resource* backBuffer = nullptr;
+	if (FAILED(swap->GetBuffer(
+		0,
+		__uuidof(ID3D11Resource),
+		reinterpret_cast<void**>(&backBuffer)
+	))) throw Exception("Failed to get back buffer");
+
+	if (FAILED(device->CreateRenderTargetView(
+		backBuffer,
+		nullptr,
+		&target
+	))) throw Exception("Failed to create render target view");
 }
 
 void DV2::clear()
 {
 	const float clrArr[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	context->ClearRenderTargetView(target, clrArr);
+	context->ClearRenderTargetView(target.Get(), clrArr);
 }
 
 void DV2::clear(Colour clr)
 {
 	const float clrArr[] = {clr.r, clr.g, clr.b, clr.a};
-	context->ClearRenderTargetView(target, clrArr);
+	context->ClearRenderTargetView(target.Get(), clrArr);
 }
 
 void DV2::present()

@@ -8,6 +8,9 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <stdexcept>
+#include <wrl.h>
+
+using Microsoft::WRL::ComPtr;
 
 /* Länka med:
    - user32
@@ -30,10 +33,10 @@ public:
 		Exception(const char* msg) : std::runtime_error(msg) {}
 	};
 private:
-	IDXGISwapChain* swap;
-	ID3D11Device* device;
-	ID3D11DeviceContext* context;
-	ID3D11RenderTargetView* target;
+	ComPtr<IDXGISwapChain> swap;
+	ComPtr<ID3D11Device> device;
+	ComPtr<ID3D11DeviceContext> context;
+	ComPtr<ID3D11RenderTargetView> target;
 
 	template <typename T>
 	static void safeRelease(T*& t)
@@ -46,7 +49,6 @@ private:
 	}
 public:
 	DV2(HWND hWnd);
-	~DV2();
 
 	DV2(const DV2&) = delete;
 	DV2& operator=(const DV2&) = delete;
