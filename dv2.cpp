@@ -258,13 +258,13 @@ void DV2::test()
 		{-0.25f, 0.25f},
 		{0.25f, 0.25f},
 		{0.25f, -0.25f},
-		{-0.25f, -0.25f},
 		{-0.25f, 0.25f},
-		{0.25f, -0.25f}
+		{0.25f, -0.25f},
+		{-0.25f, -0.25f},
 	};
 
 	D3D11_BUFFER_DESC bd{};
-	bd.ByteWidth = sizeof(bd);
+	bd.ByteWidth = sizeof(vertices);
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.StructureByteStride = sizeof(Vertex);
