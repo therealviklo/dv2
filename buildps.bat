@@ -1,0 +1,1 @@
+@"C:\program files (x86)\windows kits\10\bin\10.0.17763.0\x64\fxc" -E main -T ps_4_0_level_9_3 pixelshader.hlsl -Fh pixelshader.cso
