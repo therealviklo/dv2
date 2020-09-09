@@ -17,7 +17,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		{
 			dv2.clear({1.0f, 0.0f, 0.0f, 1.0f});
 
-			dv2.test();
+			dv2.test(0.0f);
 
 			dv2.present();
 			w.update();

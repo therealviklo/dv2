@@ -37,6 +37,12 @@ private:
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
 	ComPtr<ID3D11RenderTargetView> target;
+	
+	ComPtr<ID3D11Buffer> vertexBuffer;
+	ComPtr<ID3D11Buffer> matrixBuffer;
+	ComPtr<ID3D11PixelShader> pixelShader;
+	ComPtr<ID3D11VertexShader> vertexShader;
+	ComPtr<ID3D11InputLayout> inputLayout;
 
 	template <typename T>
 	static void safeRelease(T*& t)
@@ -56,7 +62,7 @@ public:
 	void clear();
 	void clear(Colour clr);
 
-	void test();
+	void test(float angle);
 
 	void present();
 };
