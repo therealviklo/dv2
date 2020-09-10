@@ -10,6 +10,9 @@
 #include <stdexcept>
 #include <wrl.h>
 #include <directxmath.h>
+#include <wincodec.h>
+#include <memory>
+#include <unordered_map>
 
 using Microsoft::WRL::ComPtr;
 
@@ -47,6 +50,11 @@ private:
 	ComPtr<ID3D11PixelShader> pixelShader;
 	ComPtr<ID3D11VertexShader> vertexShader;
 	ComPtr<ID3D11InputLayout> inputLayout;
+
+    ComPtr<IWICImagingFactory> wicFactory;
+	ComPtr<ID3D11SamplerState> samplerState;
+	ComPtr<ID3D11Texture2D> testTex;
+	ComPtr<ID3D11ShaderResourceView> testTexView;
 public:
 	DV2(HWND hWnd);
 

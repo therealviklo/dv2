@@ -1,4 +1,8 @@
-float4 main() : SV_Target
+Texture2D tex;
+
+SamplerState ss;
+
+float4 main(float2 texPos : TexCoord) : SV_Target
 {
-	return float4(0.0f, 0.0f, 1.0f, 1.0f);
+	return tex.Sample(ss, texPos);
 }

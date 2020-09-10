@@ -1,19 +1,19 @@
 #include "dv2.h"
 
 constexpr const uint8_t vertexShaderData[] = {
-     68,  88,  66,  67, 162, 105, 
-    215,  72, 129, 234, 214, 198, 
-    215,  30, 201,  56,  61,  24, 
-     17,   2,   1,   0,   0,   0, 
-    160,   3,   0,   0,   6,   0, 
+     68,  88,  66,  67,  60, 169, 
+    196, 219, 239,  82, 160, 148, 
+    207, 101, 167, 124,  92, 210, 
+    147, 213,   1,   0,   0,   0, 
+     40,   4,   0,   0,   6,   0, 
       0,   0,  56,   0,   0,   0, 
-     20,   1,   0,   0,   4,   2, 
-      0,   0, 128,   2,   0,   0, 
-     56,   3,   0,   0, 108,   3, 
+     44,   1,   0,   0,  72,   2, 
+      0,   0, 196,   2,   0,   0, 
+    124,   3,   0,   0, 208,   3, 
       0,   0,  65, 111, 110,  57, 
-    212,   0,   0,   0, 212,   0, 
+    236,   0,   0,   0, 236,   0, 
       0,   0,   0,   2, 254, 255, 
-    160,   0,   0,   0,  52,   0, 
+    184,   0,   0,   0,  52,   0, 
       0,   0,   1,   0,  36,   0, 
       0,   0,  48,   0,   0,   0, 
      48,   0,   0,   0,  36,   0, 
@@ -27,6 +27,8 @@ constexpr const uint8_t vertexShaderData[] = {
       0,   0,   0,   0,   0,   0, 
      31,   0,   0,   2,   5,   0, 
       0, 128,   0,   0,  15, 144, 
+     31,   0,   0,   2,   5,   0, 
+      1, 128,   1,   0,  15, 144, 
       4,   0,   0,   4,   0,   0, 
       7, 128,   0,   0, 196, 144, 
       5,   0, 208, 160,   5,   0, 
@@ -46,161 +48,199 @@ constexpr const uint8_t vertexShaderData[] = {
       0,   0, 228, 160,   1,   0, 
     228, 128,   1,   0,   0,   2, 
       0,   0,   8, 192,   0,   0, 
-      0, 128, 255, 255,   0,   0, 
-     83,  72,  68,  82, 232,   0, 
+      0, 128,   1,   0,   0,   2, 
+      0,   0,   3, 224,   1,   0, 
+    228, 144, 255, 255,   0,   0, 
+     83,  72,  68,  82,  20,   1, 
       0,   0,  64,   0,   1,   0, 
-     58,   0,   0,   0,  89,   0, 
+     69,   0,   0,   0,  89,   0, 
       0,   4,  70, 142,  32,   0, 
       0,   0,   0,   0,   4,   0, 
       0,   0,  95,   0,   0,   3, 
      50,  16,  16,   0,   0,   0, 
+      0,   0,  95,   0,   0,   3, 
+     50,  16,  16,   0,   1,   0, 
+      0,   0, 101,   0,   0,   3, 
+     50,  32,  16,   0,   0,   0, 
       0,   0, 103,   0,   0,   4, 
-    242,  32,  16,   0,   0,   0, 
+    242,  32,  16,   0,   1,   0, 
       0,   0,   1,   0,   0,   0, 
     104,   0,   0,   2,   1,   0, 
       0,   0,  54,   0,   0,   5, 
-     50,   0,  16,   0,   0,   0, 
+     50,  32,  16,   0,   0,   0, 
       0,   0,  70,  16,  16,   0, 
-      0,   0,   0,   0,  54,   0, 
-      0,   5,  66,   0,  16,   0, 
-      0,   0,   0,   0,   1,  64, 
-      0,   0,   0,   0, 128,  63, 
-     16,   0,   0,   8,  18,  32, 
+      1,   0,   0,   0,  54,   0, 
+      0,   5,  50,   0,  16,   0, 
+      0,   0,   0,   0,  70,  16, 
      16,   0,   0,   0,   0,   0, 
-     70,   2,  16,   0,   0,   0, 
-      0,   0,  70, 131,  32,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,  16,   0,   0,   8, 
-     34,  32,  16,   0,   0,   0, 
+     54,   0,   0,   5,  66,   0, 
+     16,   0,   0,   0,   0,   0, 
+      1,  64,   0,   0,   0,   0, 
+    128,  63,  16,   0,   0,   8, 
+     18,  32,  16,   0,   1,   0, 
       0,   0,  70,   2,  16,   0, 
       0,   0,   0,   0,  70, 131, 
      32,   0,   0,   0,   0,   0, 
-      1,   0,   0,   0,  16,   0, 
-      0,   8,  66,  32,  16,   0, 
-      0,   0,   0,   0,  70,   2, 
+      0,   0,   0,   0,  16,   0, 
+      0,   8,  34,  32,  16,   0, 
+      1,   0,   0,   0,  70,   2, 
      16,   0,   0,   0,   0,   0, 
      70, 131,  32,   0,   0,   0, 
-      0,   0,   2,   0,   0,   0, 
-     16,   0,   0,   8, 130,  32, 
-     16,   0,   0,   0,   0,   0, 
+      0,   0,   1,   0,   0,   0, 
+     16,   0,   0,   8,  66,  32, 
+     16,   0,   1,   0,   0,   0, 
      70,   2,  16,   0,   0,   0, 
       0,   0,  70, 131,  32,   0, 
-      0,   0,   0,   0,   3,   0, 
-      0,   0,  62,   0,   0,   1, 
-     83,  84,  65,  84, 116,   0, 
-      0,   0,   7,   0,   0,   0, 
-      1,   0,   0,   0,   0,   0, 
-      0,   0,   2,   0,   0,   0, 
-      4,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      1,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      2,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,  82,  68, 
-     69,  70, 176,   0,   0,   0, 
-      1,   0,   0,   0,  68,   0, 
-      0,   0,   1,   0,   0,   0, 
-     28,   0,   0,   0,   0,   4, 
-    254, 255,   0,   1,   0,   0, 
-    136,   0,   0,   0,  60,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   1,   0, 
-      0,   0,   0,   0,   0,   0, 
-     67,  66, 117, 102,   0, 171, 
-    171, 171,  60,   0,   0,   0, 
-      1,   0,   0,   0,  92,   0, 
-      0,   0,  64,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0, 116,   0,   0,   0, 
-      0,   0,   0,   0,  64,   0, 
-      0,   0,   2,   0,   0,   0, 
-    120,   0,   0,   0,   0,   0, 
-      0,   0, 109, 116, 120,   0, 
-      3,   0,   3,   0,   4,   0, 
-      4,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,  77, 105, 
-     99, 114, 111, 115, 111, 102, 
-    116,  32,  40,  82,  41,  32, 
-     72,  76,  83,  76,  32,  83, 
-    104,  97, 100, 101, 114,  32, 
-     67, 111, 109, 112, 105, 108, 
-    101, 114,  32,  49,  48,  46, 
-     49,   0,  73,  83,  71,  78, 
-     44,   0,   0,   0,   1,   0, 
-      0,   0,   8,   0,   0,   0, 
+      0,   0,   0,   0,   2,   0, 
+      0,   0,  16,   0,   0,   8, 
+    130,  32,  16,   0,   1,   0, 
+      0,   0,  70,   2,  16,   0, 
+      0,   0,   0,   0,  70, 131, 
      32,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      3,   0,   0,   0,   0,   0, 
-      0,   0,   3,   3,   0,   0, 
-     80, 111, 115, 105, 116, 105, 
-    111, 110,   0, 171, 171, 171, 
-     79,  83,  71,  78,  44,   0, 
+      3,   0,   0,   0,  62,   0, 
+      0,   1,  83,  84,  65,  84, 
+    116,   0,   0,   0,   8,   0, 
       0,   0,   1,   0,   0,   0, 
-      8,   0,   0,   0,  32,   0, 
+      0,   0,   0,   0,   4,   0, 
+      0,   0,   4,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-      1,   0,   0,   0,   3,   0, 
+      0,   0,   1,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-     15,   0,   0,   0,  83,  86, 
-     95,  80, 111, 115, 105, 116, 
-    105, 111, 110,   0
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   3,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+     82,  68,  69,  70, 176,   0, 
+      0,   0,   1,   0,   0,   0, 
+     68,   0,   0,   0,   1,   0, 
+      0,   0,  28,   0,   0,   0, 
+      0,   4, 254, 255,   0,   1, 
+      0,   0, 136,   0,   0,   0, 
+     60,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      1,   0,   0,   0,   0,   0, 
+      0,   0,  67,  66, 117, 102, 
+      0, 171, 171, 171,  60,   0, 
+      0,   0,   1,   0,   0,   0, 
+     92,   0,   0,   0,  64,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0, 116,   0, 
+      0,   0,   0,   0,   0,   0, 
+     64,   0,   0,   0,   2,   0, 
+      0,   0, 120,   0,   0,   0, 
+      0,   0,   0,   0, 109, 116, 
+    120,   0,   3,   0,   3,   0, 
+      4,   0,   4,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+     77, 105,  99, 114, 111, 115, 
+    111, 102, 116,  32,  40,  82, 
+     41,  32,  72,  76,  83,  76, 
+     32,  83, 104,  97, 100, 101, 
+    114,  32,  67, 111, 109, 112, 
+    105, 108, 101, 114,  32,  49, 
+     48,  46,  49,   0,  73,  83, 
+     71,  78,  76,   0,   0,   0, 
+      2,   0,   0,   0,   8,   0, 
+      0,   0,  56,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   3,   0,   0,   0, 
+      0,   0,   0,   0,   3,   3, 
+      0,   0,  65,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   3,   0,   0,   0, 
+      1,   0,   0,   0,   3,   3, 
+      0,   0,  80, 111, 115, 105, 
+    116, 105, 111, 110,   0,  84, 
+    101, 120,  67, 111, 111, 114, 
+    100,   0, 171, 171,  79,  83, 
+     71,  78,  80,   0,   0,   0, 
+      2,   0,   0,   0,   8,   0, 
+      0,   0,  56,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   3,   0,   0,   0, 
+      0,   0,   0,   0,   3,  12, 
+      0,   0,  65,   0,   0,   0, 
+      0,   0,   0,   0,   1,   0, 
+      0,   0,   3,   0,   0,   0, 
+      1,   0,   0,   0,  15,   0, 
+      0,   0,  84, 101, 120,  67, 
+    111, 111, 114, 100,   0,  83, 
+     86,  95,  80, 111, 115, 105, 
+    116, 105, 111, 110,   0, 171, 
+    171, 171
 };
 
 constexpr const uint8_t pixelShaderData[] =
 {
-     68,  88,  66,  67, 132,   0, 
-      2,   7, 179, 161,  93, 125, 
-     99, 210, 140, 141, 110, 217, 
-     64, 117,   1,   0,   0,   0, 
-    220,   1,   0,   0,   6,   0, 
+     68,  88,  66,  67, 135, 208, 
+    249, 177, 136,  47, 163, 101, 
+     41, 211,  31,   5, 136, 116, 
+    252, 134,   1,   0,   0,   0, 
+    136,   2,   0,   0,   6,   0, 
       0,   0,  56,   0,   0,   0, 
-    144,   0,   0,   0, 208,   0, 
-      0,   0,  76,   1,   0,   0, 
-    152,   1,   0,   0, 168,   1, 
+    164,   0,   0,   0,  16,   1, 
+      0,   0, 140,   1,   0,   0, 
+     32,   2,   0,   0,  84,   2, 
       0,   0,  65, 111, 110,  57, 
-     80,   0,   0,   0,  80,   0, 
+    100,   0,   0,   0, 100,   0, 
       0,   0,   0,   2, 255, 255, 
-     44,   0,   0,   0,  36,   0, 
-      0,   0,   0,   0,  36,   0, 
-      0,   0,  36,   0,   0,   0, 
-     36,   0,   0,   0,  36,   0, 
-      0,   0,  36,   0,   1,   2, 
-    255, 255,  81,   0,   0,   5, 
-      0,   0,  15, 160,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0, 128,  63,   0,   0, 
-    128,  63,   1,   0,   0,   2, 
-      0,   8,  15, 128,   0,   0, 
-    228, 160, 255, 255,   0,   0, 
-     83,  72,  68,  82,  56,   0, 
-      0,   0,  64,   0,   0,   0, 
-     14,   0,   0,   0, 101,   0, 
+     60,   0,   0,   0,  40,   0, 
+      0,   0,   0,   0,  40,   0, 
+      0,   0,  40,   0,   0,   0, 
+     40,   0,   1,   0,  36,   0, 
+      0,   0,  40,   0,   0,   0, 
+      0,   0,   1,   2, 255, 255, 
+     31,   0,   0,   2,   0,   0, 
+      0, 128,   0,   0,   3, 176, 
+     31,   0,   0,   2,   0,   0, 
+      0, 144,   0,   8,  15, 160, 
+     66,   0,   0,   3,   0,   0, 
+     15, 128,   0,   0, 228, 176, 
+      0,   8, 228, 160,   1,   0, 
+      0,   2,   0,   8,  15, 128, 
+      0,   0, 228, 128, 255, 255, 
+      0,   0,  83,  72,  68,  82, 
+    100,   0,   0,   0,  64,   0, 
+      0,   0,  25,   0,   0,   0, 
+     90,   0,   0,   3,   0,  96, 
+     16,   0,   0,   0,   0,   0, 
+     88,  24,   0,   4,   0, 112, 
+     16,   0,   0,   0,   0,   0, 
+     85,  85,   0,   0,  98,  16, 
+      0,   3,  50,  16,  16,   0, 
+      0,   0,   0,   0, 101,   0, 
       0,   3, 242,  32,  16,   0, 
-      0,   0,   0,   0,  54,   0, 
-      0,   8, 242,  32,  16,   0, 
-      0,   0,   0,   0,   2,  64, 
+      0,   0,   0,   0,  69,   0, 
+      0,   9, 242,  32,  16,   0, 
+      0,   0,   0,   0,  70,  16, 
+     16,   0,   0,   0,   0,   0, 
+     70, 126,  16,   0,   0,   0, 
+      0,   0,   0,  96,  16,   0, 
+      0,   0,   0,   0,  62,   0, 
+      0,   1,  83,  84,  65,  84, 
+    116,   0,   0,   0,   2,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   2,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-    128,  63,   0,   0, 128,  63, 
-     62,   0,   0,   1,  83,  84, 
-     65,  84, 116,   0,   0,   0, 
-      2,   0,   0,   0,   0,   0, 
+      0,   0,   1,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       1,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   1,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
@@ -208,38 +248,49 @@ constexpr const uint8_t pixelShaderData[] =
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   1,   0, 
+      0,   0,   0,   0,   0,   0, 
+     82,  68,  69,  70, 140,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   2,   0, 
+      0,   0,  28,   0,   0,   0, 
+      0,   4, 255, 255,   0,   1, 
+      0,   0,  99,   0,   0,   0, 
+     92,   0,   0,   0,   3,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,  82,  68,  69,  70, 
-     68,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,  28,   0, 
-      0,   0,   0,   4, 255, 255, 
-      0,   1,   0,   0,  28,   0, 
-      0,   0,  77, 105,  99, 114, 
-    111, 115, 111, 102, 116,  32, 
-     40,  82,  41,  32,  72,  76, 
-     83,  76,  32,  83, 104,  97, 
-    100, 101, 114,  32,  67, 111, 
-    109, 112, 105, 108, 101, 114, 
-     32,  49,  48,  46,  49,   0, 
-     73,  83,  71,  78,   8,   0, 
-      0,   0,   0,   0,   0,   0, 
-      8,   0,   0,   0,  79,  83, 
+      1,   0,   0,   0,   0,   0, 
+      0,   0,  95,   0,   0,   0, 
+      2,   0,   0,   0,   5,   0, 
+      0,   0,   4,   0,   0,   0, 
+    255, 255, 255, 255,   0,   0, 
+      0,   0,   1,   0,   0,   0, 
+     12,   0,   0,   0, 115, 115, 
+      0, 116, 101, 120,   0,  77, 
+    105,  99, 114, 111, 115, 111, 
+    102, 116,  32,  40,  82,  41, 
+     32,  72,  76,  83,  76,  32, 
+     83, 104,  97, 100, 101, 114, 
+     32,  67, 111, 109, 112, 105, 
+    108, 101, 114,  32,  49,  48, 
+     46,  49,   0, 171,  73,  83, 
      71,  78,  44,   0,   0,   0, 
       1,   0,   0,   0,   8,   0, 
       0,   0,  32,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   3,   0,   0,   0, 
-      0,   0,   0,   0,  15,   0, 
-      0,   0,  83,  86,  95,  84, 
-     97, 114, 103, 101, 116,   0, 
-    171, 171
+      0,   0,   0,   0,   3,   3, 
+      0,   0,  84, 101, 120,  67, 
+    111, 111, 114, 100,   0, 171, 
+    171, 171,  79,  83,  71,  78, 
+     44,   0,   0,   0,   1,   0, 
+      0,   0,   8,   0,   0,   0, 
+     32,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      3,   0,   0,   0,   0,   0, 
+      0,   0,  15,   0,   0,   0, 
+     83,  86,  95,  84,  97, 114, 
+    103, 101, 116,   0, 171, 171
 };
 
 DV2::DV2(HWND hWnd)
@@ -297,14 +348,16 @@ DV2::DV2(HWND hWnd)
 	{
 		float x;
 		float y;
+		float u;
+		float v;
 	};
 	const Vertex vertices[] = {
-		{-1.0f, 1.0f},
-		{1.0f, 1.0f},
-		{1.0f, -1.0f},
-		{-1.0f, 1.0f},
-		{1.0f, -1.0f},
-		{-1.0f, -1.0f},
+		{-1.0f, 1.0f, 0.0f, 0.0f},
+		{1.0f, 1.0f, 1.0f, 0.0f},
+		{1.0f, -1.0f, 1.0f, 1.0f},
+		{-1.0f, 1.0f, 0.0f, 0.0f},
+		{1.0f, -1.0f, 1.0f, 1.0f},
+		{-1.0f, -1.0f, 0.0f, 1.0f},
 	};
 
 	D3D11_BUFFER_DESC bd{};
@@ -362,12 +415,13 @@ DV2::DV2(HWND hWnd)
 	context->VSSetShader(vertexShader.Get(), nullptr, 0);
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] = {
-		{"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TexCoord", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 	if (FAILED(
 		device->CreateInputLayout(
 			ied,
-			1,
+			2,
 			vertexShaderData,
 			sizeof(vertexShaderData),
 			&inputLayout
@@ -382,6 +436,156 @@ DV2::DV2(HWND hWnd)
 	RECT wndSize;
 	if (!GetClientRect(hWnd, &wndSize)) throw Exception("Failed to get window size");
 	setSize(wndSize.right, wndSize.bottom);
+
+    if (FAILED(
+        CoCreateInstance(
+            CLSID_WICImagingFactory,
+			nullptr,
+			CLSCTX_INPROC_SERVER,
+			__uuidof(IWICImagingFactory),
+			&wicFactory
+        )
+    )) throw Exception("Failed to create WIC factory");
+
+	D3D11_SAMPLER_DESC samplerDesc{};
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	if (FAILED(device->CreateSamplerState(&samplerDesc, &samplerState))) throw Exception("Failed to create sampler state");
+
+	context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
+
+	// Ladda testtextur
+	ComPtr<IWICBitmapDecoder> decoder;
+	if (FAILED(
+		wicFactory->CreateDecoderFromFilename(
+			L"froody.png",
+			nullptr,
+			GENERIC_READ,
+			WICDecodeMetadataCacheOnDemand,
+			&decoder
+		)
+	)) throw Exception("Failed to create decoder for image file");
+
+	ComPtr<IWICBitmapFrameDecode> frame;
+	if (FAILED(
+		decoder->GetFrame(0, &frame)
+	)) throw Exception("Failed to get image frame");
+
+	WICPixelFormatGUID pixelFormat;
+	if (FAILED(
+		frame->GetPixelFormat(&pixelFormat)
+	)) throw Exception("Failed to get pixel format");
+
+	size_t rowPitch = 0;
+	size_t bufSize = 0;
+	UINT width = 0;
+	UINT height = 0;
+	std::unique_ptr<uint8_t[]> buf;
+	if (memcmp(&pixelFormat, &GUID_WICPixelFormat32bppBGRA, sizeof(WICPixelFormatGUID)) != 0)
+	{
+		// Måste konvertera formatet.
+
+		ComPtr<IWICFormatConverter> formatConverter;
+		if (FAILED(wicFactory->CreateFormatConverter(&formatConverter))) throw Exception("Failed to create WIC format converter");
+
+		if (FAILED(
+			formatConverter->Initialize(
+				frame.Get(),
+				GUID_WICPixelFormat32bppBGRA,
+				WICBitmapDitherTypeNone,
+				nullptr,
+				0.0,
+				WICBitmapPaletteTypeCustom
+			)
+		)) throw Exception("Failed to initialise WIC format converter");
+
+		if (FAILED(formatConverter->GetSize(&width, &height))) throw Exception("Failed to get image size");
+
+		WICPixelFormatGUID newPixelFormat;
+		if (FAILED(formatConverter->GetPixelFormat(&newPixelFormat))) throw Exception("Failed to get pixel format");
+
+		if (memcmp(&newPixelFormat, &GUID_WICPixelFormat32bppBGRA, sizeof(WICPixelFormatGUID)) != 0)
+			throw Exception("Failed to convert image format"); // Detta borde aldrig hända.
+
+		ComPtr<IWICComponentInfo> compinfo;
+		if (FAILED(wicFactory->CreateComponentInfo(newPixelFormat, &compinfo))) throw Exception("Failed to get pixel format info");
+
+		ComPtr<IWICPixelFormatInfo> pfi;
+		if (FAILED(
+			compinfo->QueryInterface(
+				__uuidof(IWICPixelFormatInfo),
+				static_cast<void**>(&pfi)
+			)
+		)) throw Exception("Failed to get pixel format info");
+
+		UINT bpp;
+		if (FAILED(pfi->GetBitsPerPixel(&bpp))) throw Exception("Failed to get bits per pixel");
+
+		rowPitch = (width * bpp + 7) / 8;
+		bufSize = rowPitch * height;
+		buf = std::make_unique<uint8_t[]>(bufSize);
+
+		if (FAILED(formatConverter->CopyPixels(nullptr, rowPitch, bufSize, buf.get()))) throw Exception("Failed to copy pixels");
+	}
+	else
+	{
+		// Ingen konvertering behövs.
+		if (FAILED(frame->GetSize(&width, &height))) throw Exception("Failed to get image size");
+
+		ComPtr<IWICComponentInfo> compinfo;
+		if (FAILED(wicFactory->CreateComponentInfo(pixelFormat, &compinfo))) throw Exception("Failed to get pixel format info");
+		
+		ComPtr<IWICPixelFormatInfo> pfi;
+		if (FAILED(
+			compinfo->QueryInterface(
+				__uuidof(IWICPixelFormatInfo),
+				static_cast<void**>(&pfi)
+			)
+		)) throw Exception("Failed to get pixel format info");
+
+		UINT bpp;
+		if (FAILED(pfi->GetBitsPerPixel(&bpp))) throw Exception("Failed to get bits per pixel");
+
+		rowPitch = (width * bpp + 7) / 8;
+		bufSize = rowPitch * height;
+		buf = std::make_unique<uint8_t[]>(bufSize);
+
+		if (FAILED(frame->CopyPixels(nullptr, rowPitch, bufSize, buf.get()))) throw Exception("Failed to copy pixels");
+	}
+
+	D3D11_TEXTURE2D_DESC texDesc{};
+	texDesc.Width = width;
+	texDesc.Height = height;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.MipLevels = 1;
+	D3D11_SUBRESOURCE_DATA texSd{};
+	texSd.pSysMem = buf.get();
+	texSd.SysMemPitch = static_cast<UINT>(rowPitch);
+	if (static_cast<decltype(rowPitch)>(texSd.SysMemPitch) != rowPitch) throw Exception("Size error");
+	texSd.SysMemSlicePitch = static_cast<UINT>(bufSize);
+	if (static_cast<decltype(bufSize)>(texSd.SysMemSlicePitch) != bufSize) throw Exception("Size error");
+	if (FAILED(
+		device->CreateTexture2D(
+			&texDesc,
+			&texSd,
+			&testTex
+		)
+	)) throw Exception("Failed to create texture");
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd{};
+	srvd.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MostDetailedMip = 0;
+	srvd.Texture2D.MipLevels = 1;
+	if (FAILED(device->CreateShaderResourceView(testTex.Get(), &srvd, &testTexView)))
+		throw Exception("Failed to create texture view");
 }
 
 void DV2::setSize(float width, float height)
@@ -413,6 +617,8 @@ void DV2::clear(Colour clr)
 
 void DV2::draw(float x, float y, float width, float height, float angle)
 {
+	context->PSSetShaderResources(0, 1, testTexView.GetAddressOf());
+
 	const auto mtx = DirectX::XMMatrixTranspose(
 		DirectX::XMMatrixScaling(width, height, 1.0f) *
 		DirectX::XMMatrixRotationZ(angle) *
