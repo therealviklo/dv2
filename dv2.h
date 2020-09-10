@@ -9,6 +9,7 @@
 #include <d3d11.h>
 #include <stdexcept>
 #include <wrl.h>
+#include <directxmath.h>
 
 using Microsoft::WRL::ComPtr;
 
@@ -33,6 +34,9 @@ public:
 		Exception(const char* msg) : std::runtime_error(msg) {}
 	};
 private:
+	float width;
+	float height;
+
 	ComPtr<IDXGISwapChain> swap;
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
@@ -43,26 +47,18 @@ private:
 	ComPtr<ID3D11PixelShader> pixelShader;
 	ComPtr<ID3D11VertexShader> vertexShader;
 	ComPtr<ID3D11InputLayout> inputLayout;
-
-	template <typename T>
-	static void safeRelease(T*& t)
-	{
-		if (t)
-		{
-			t->Release();
-			t = nullptr;
-		}
-	}
 public:
 	DV2(HWND hWnd);
 
 	DV2(const DV2&) = delete;
 	DV2& operator=(const DV2&) = delete;
 
+	void setSize(float width, float height);
+
 	void clear();
 	void clear(Colour clr);
 
-	void test(float angle);
+	void draw(float x, float y, float width, float height, float angle);
 
 	void present();
 };

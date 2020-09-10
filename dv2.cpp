@@ -320,8 +320,8 @@ DV2::DV2(HWND hWnd)
 	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
 
 	const float mtx[4][4] = {
-		cosf(30.0f), -sinf(30.0f), 0.0f, 0.0f,
-		sinf(30.0f), cosf(30.0f), 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
@@ -379,9 +379,19 @@ DV2::DV2(HWND hWnd)
 
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	RECT wndSize;
+	if (!GetClientRect(hWnd, &wndSize)) throw Exception("Failed to get window size");
+	setSize(wndSize.right, wndSize.bottom);
+}
+
+void DV2::setSize(float width, float height)
+{
+	this->width = width;
+	this->height = height;
+	
 	D3D11_VIEWPORT vp{};
-	vp.Width = 500;
-	vp.Height = 500;
+	vp.Width = width;
+	vp.Height = height;
 	vp.MinDepth = 0;
 	vp.MaxDepth = 1;
 	vp.TopLeftX = 0;
@@ -401,16 +411,18 @@ void DV2::clear(Colour clr)
 	context->ClearRenderTargetView(target.Get(), clrArr);
 }
 
-void DV2::test(float angle)
+void DV2::draw(float x, float y, float width, float height, float angle)
 {
-	const float mtx[4][4] = {
-		cosf(angle), -sinf(angle), 0.0f, 0.0f,
-		sinf(angle), cosf(angle), 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	context->UpdateSubresource(matrixBuffer.Get(), 0, nullptr, mtx, 0, 0);//sizeof(float) * 4, sizeof(float) * 4);
-	context->PSSetConstantBuffers(0, 1, matrixBuffer.GetAddressOf());
+	const auto mtx = DirectX::XMMatrixTranspose(
+		DirectX::XMMatrixScaling(width, height, 1.0f) *
+		DirectX::XMMatrixRotationZ(angle) *
+		DirectX::XMMatrixTranslation(x, y, 0.0f) *
+		DirectX::XMMatrixScaling(1.0f / this->width, 1.0f / this->height, 1.0f)
+	);
+	D3D11_MAPPED_SUBRESOURCE msr;
+	if (FAILED(context->Map(matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr))) throw Exception("Failed to map buffer");
+	memcpy(msr.pData, mtx.r, sizeof(mtx.r));
+	context->Unmap(matrixBuffer.Get(), 0);
 
 	context->Draw(6, 0);
 }

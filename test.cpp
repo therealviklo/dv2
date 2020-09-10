@@ -9,15 +9,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 {
 	try
 	{
-		Window w(L"Test", 500, 500);
+		Window w(L"Test", 800, 500);
 		DV2 dv2(w.getHwnd());
 
 		int k = 0;
 		while (w.exists())
 		{
+			k++;
+
 			dv2.clear({1.0f, 0.0f, 0.0f, 1.0f});
 
-			dv2.test(0.0f);
+			dv2.draw(500.0f, 0.0f, 50.0f, 100.0f, k / 50.0f);
 
 			dv2.present();
 			w.update();
