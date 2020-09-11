@@ -12,6 +12,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		Window w(L"Test", 800, 500);
 		DV2 dv2(w.getHwnd());
 
+		Texture froody = dv2.createTexture(L"froody.png");
+
 		int k = 0;
 		while (w.exists())
 		{
@@ -19,7 +21,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 			dv2.clear({1.0f, 0.0f, 0.0f, 1.0f});
 
-			dv2.draw(500.0f, 0.0f, 100.0f, 200.0f, k / 50.0f);
+			dv2.draw(
+				froody,
+				500.0f, 0.0f,
+				k / 50.0f
+			);
 
 			dv2.present();
 			w.update();

@@ -28,6 +28,23 @@ struct Colour
 	float a;
 };
 
+class DV2;
+
+class Texture
+{
+	friend class DV2;
+private:
+	UINT width;
+	UINT height;
+	ComPtr<ID3D11Texture2D> tex;
+	ComPtr<ID3D11ShaderResourceView> texView;
+
+	Texture(const wchar_t* filename, ID3D11Device* device, IWICImagingFactory* wicFactory);
+public:
+	UINT getWidth() const noexcept {return width;}
+	UINT getHeight() const noexcept {return height;}
+};
+
 class DV2
 {
 public:
@@ -53,8 +70,6 @@ private:
 
     ComPtr<IWICImagingFactory> wicFactory;
 	ComPtr<ID3D11SamplerState> samplerState;
-	ComPtr<ID3D11Texture2D> testTex;
-	ComPtr<ID3D11ShaderResourceView> testTexView;
 public:
 	DV2(HWND hWnd);
 
@@ -63,10 +78,79 @@ public:
 
 	void setSize(float width, float height);
 
+	Texture createTexture(const wchar_t* filename);
+
 	void clear();
 	void clear(Colour clr);
 
-	void draw(float x, float y, float width, float height, float angle);
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float width,
+		float height,
+		float srcX,
+		float srcY,
+		float srcWidth,
+		float srcHeight,
+		float angle
+	);
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float width,
+		float height,
+		float srcX,
+		float srcY,
+		float srcWidth,
+		float srcHeight
+	) {draw(texture, x, y, width, height, srcX, srcY, srcWidth, srcHeight, 0.0f);}
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float width,
+		float height,
+		float angle
+	) {draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle);}
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float width,
+		float height
+	) {draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float srcX,
+		float srcY,
+		float srcWidth,
+		float srcHeight,
+		float angle
+	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float srcX,
+		float srcY,
+		float srcWidth,
+		float srcHeight
+	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), srcX, srcY, srcWidth, srcHeight, 0.0f);}
+	void draw(
+		Texture& texture,
+		float x,
+		float y,
+		float angle
+	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle);}
+	void draw(
+		Texture& texture,
+		float x,
+		float y
+	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
 
 	void present();
 };
