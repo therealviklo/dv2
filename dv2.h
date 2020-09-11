@@ -67,6 +67,7 @@ private:
 	ComPtr<ID3D11PixelShader> pixelShader;
 	ComPtr<ID3D11VertexShader> vertexShader;
 	ComPtr<ID3D11InputLayout> inputLayout;
+	ComPtr<ID3D11BlendState> blendState;
 
     ComPtr<IWICImagingFactory> wicFactory;
 	ComPtr<ID3D11SamplerState> samplerState;
@@ -153,4 +154,21 @@ public:
 	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
 
 	void present();
+
+	float clientToDVX(float x) const noexcept
+	{
+		return (x - width / 2.0f) * 2.0f;
+	}
+	float DVToClientX(float x) const noexcept
+	{
+		return (x + width / 2.0f) / 2.0f;
+	}
+	float clientToDVY(float y) const noexcept
+	{
+		return (height / 2.0f - y) * 2.0f;
+	}
+	float DVToClientY(float y) const noexcept
+	{
+		return (-height / 2.0f - y) / 2.0f;
+	}
 };

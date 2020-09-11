@@ -14,17 +14,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 		Texture froody = dv2.createTexture(L"froody.png");
 
-		int k = 0;
+		double k = 0.0;
+		double s = 1.0 / 25.0;
 		while (w.exists())
 		{
-			k++;
+			for (Window::Mouse::Event wme = w.mouse.getEvent(); wme.type != WMET_INVALID; wme = w.mouse.getEvent())
+			{
+				if (wme.type == WMET_VSCROLL)
+				{
+					s += wme.scroll / 120.0 / 100.0;
+				}
+			}
+			k += s;
 
-			dv2.clear({1.0f, 0.0f, 0.0f, 1.0f});
+			dv2.clear({1.0f, 1.0f, 1.0f, 1.0f});
 
 			dv2.draw(
 				froody,
-				500.0f, 0.0f,
-				k / 50.0f
+				dv2.clientToDVX(w.mouse.getX()), dv2.clientToDVY(w.mouse.getY()),
+				k
 			);
 
 			dv2.present();

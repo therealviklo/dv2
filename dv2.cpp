@@ -616,12 +616,26 @@ DV2::DV2(HWND hWnd)
 
 	D3D11_SAMPLER_DESC samplerDesc{};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	if (FAILED(device->CreateSamplerState(&samplerDesc, &samplerState))) throw Exception("Failed to create sampler state");
 
 	context->PSSetSamplers(0, 1, samplerState.GetAddressOf());
+
+	D3D11_BLEND_DESC bsd{};
+	bsd.RenderTarget[0].BlendEnable = TRUE;
+	bsd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	bsd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	bsd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	bsd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_INV_DEST_ALPHA;
+	bsd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	bsd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	bsd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	if (FAILED(device->CreateBlendState(&bsd, &blendState))) throw Exception("Failed to create blend state");
+
+	float blendFactor[4] = {0, 0, 0, 0};
+	context->OMSetBlendState(blendState.Get(), blendFactor, 0xffffffff);
 }
 
 void DV2::setSize(float width, float height)
