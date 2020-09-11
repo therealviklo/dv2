@@ -153,7 +153,10 @@ public:
 		float y
 	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
 
-	void present();
+	// Synkar med refreshraten.
+	void presentSync();
+	// Ingen synkning, visar direkt.
+	void presentNoSync();
 
 	float clientToDVX(float x) const noexcept
 	{

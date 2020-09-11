@@ -34,11 +34,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 			dv2.clear({1.0f, 1.0f, 1.0f, 1.0f});
 
-			dv2.draw(
-				froody,
-				dv2.clientToDVX(w.mouse.getX()), dv2.clientToDVY(w.mouse.getY()),
-				k
-			);
+			for (int i = 0; i < 100; i++)
+				dv2.draw(
+					froody,
+					dv2.clientToDVX(w.mouse.getX()), dv2.clientToDVY(w.mouse.getY()),
+					k
+				);
 
 			dv2.present();
 			w.update();

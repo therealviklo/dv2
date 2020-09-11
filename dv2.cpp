@@ -707,7 +707,12 @@ void DV2::draw(
 	context->Draw(6, 0);
 }
 
-void DV2::present()
+void DV2::presentSync()
 {
 	swap->Present(1, 0);
+}
+
+void DV2::presentNoSync()
+{
+	swap->Present(0, 0);
 }
