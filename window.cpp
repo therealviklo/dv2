@@ -102,12 +102,16 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_KEYDOWN:
 		{
+			if (wParam >= keyboard.keyStates.size()) return DefWindowProcW(hWnd, msg, wParam, lParam);
+
 			keyboard.keyStates[wParam] = true;
 			keyboard.addEvent(Keyboard::Event(wParam, WKET_KEYDOWN));
 		}
 		return 0;
 		case WM_KEYUP:
 		{
+			if (wParam >= keyboard.keyStates.size()) return DefWindowProcW(hWnd, msg, wParam, lParam);
+
 			keyboard.keyStates[wParam] = false;
 			keyboard.addEvent(Keyboard::Event(wParam, WKET_KEYUP));
 		}

@@ -12,6 +12,9 @@
 #include <array>
 #include <cstdint>
 
+#include <sstream>
+#include <iomanip>
+
 enum WKET
 {
 	WKET_INVALID,
@@ -70,7 +73,7 @@ public:
 			Event() noexcept : key(0), type(WKET_INVALID) {}
 		};
 	private:
-		std::bitset<0xff> keyStates;
+		std::bitset<0x100> keyStates;
 		std::array<Event, 16> events;
 
 		void addEvent(Event event) noexcept;
