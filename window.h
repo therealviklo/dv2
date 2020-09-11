@@ -12,9 +12,6 @@
 #include <array>
 #include <cstdint>
 
-#include <sstream>
-#include <iomanip>
-
 enum WKET
 {
 	WKET_INVALID,
