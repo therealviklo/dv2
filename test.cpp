@@ -1,9 +1,11 @@
 #include <sstream>
 #include "dv2.h"
 #include "window.h"
+#include "timer.h"
 
 #include "dv2.cpp"
 #include "window.cpp"
+#include "timer.cpp"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
@@ -16,6 +18,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 		double k = 0.0;
 		double s = 1.0 / 25.0;
+		double sum = 0.0;
+		int n = 0;
+		Timer t;
 		while (w.exists())
 		{
 			for (Window::Mouse::Event wme = w.mouse.getEvent(); wme.type != WMET_INVALID; wme = w.mouse.getEvent())
@@ -37,6 +42,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 			dv2.present();
 			w.update();
+			t.endFrame();
+			sum += t.getFramerate();
+			n++;
+		}
+
+		if (n)
+		{
+			std::wstringstream ss;
+			ss << (sum / n);
+			MessageBoxW(nullptr, ss.str().c_str(), L"eeeriewfk", 0);
 		}
 	}
 	catch (const std::exception& e)
