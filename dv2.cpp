@@ -681,7 +681,15 @@ void DV2::resize()
 
 void DV2::setFullscreen(bool on)
 {
-	if (FAILED(swap->SetFullscreenState(on, nullptr))) throw Exception("Failed to set fullscreen state");
+	HRESULT hr = swap->SetFullscreenState(on, nullptr);
+	if (hr == DXGI_ERROR_NOT_CURRENTLY_AVAILABLE || hr == DXGI_STATUS_MODE_CHANGE_IN_PROGRESS)
+	{
+		throw NoFullscreenChange();
+	}
+	else if (FAILED(hr))
+	{
+		throw Exception("Failed to set fullscreen state");
+	}
 }
 
 Texture DV2::createTexture(const wchar_t* filename)

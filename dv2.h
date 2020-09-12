@@ -52,6 +52,11 @@ public:
 	public:
 		Exception(const char* msg) : std::runtime_error(msg) {}
 	};
+	class NoFullscreenChange : public Exception
+	{
+	public:
+		NoFullscreenChange() : Exception("Unable to change fullscreen state") {}
+	};
 private:
 	float width;
 	float height;
@@ -83,7 +88,15 @@ public:
 	DV2(const DV2&) = delete;
 	DV2& operator=(const DV2&) = delete;
 
+	/* Denna funktion återskapar många saker. Det betyder att om denna
+	   funktion kastar en exception så går det nog inte att använda
+	   DV2-klassen längre, eftersom vissa saker kanske inte är återskapade. */
 	void resize();
+	/* Ibland kan det bli så att denna funktion misslyckas men att
+	   programmet kan fortsätta sin körning. Om det är så kastar
+	   funktionen en exception av typen DV2::NoFullscreenChange istället
+	   för en av typen DV2::Exception. (Notera att DV2::NoFullscreenChange
+	   är en underklass till DV2::Exception.) */
 	void setFullscreen(bool on);
 
 	Texture createTexture(const wchar_t* filename);
