@@ -11,6 +11,7 @@
 #include <bitset>
 #include <array>
 #include <cstdint>
+#include "dv2.h"
 
 enum WKET
 {
@@ -55,7 +56,11 @@ private:
 		WndClass& operator=(const WndClass&) = delete;
 	} wndClass;
 
+	bool dv2Created;
+
 	HWND hWnd;
+
+	inline HWND createWindow(const wchar_t* title, int width, int height);
 public:
 	class Keyboard
 	{
@@ -116,6 +121,7 @@ public:
 		
 		void clearEvents() noexcept {events = decltype(events)();}
 	} mouse;
+	DV2 dv2;
 
 	Window(const wchar_t* title, int width, int height);
 	~Window();
@@ -124,6 +130,7 @@ public:
 	Window& operator=(const Window&) = delete;
 
 	void update() noexcept;
+	void updateBlocking() noexcept;
 
 	constexpr HWND getHwnd() noexcept {return hWnd;}
 	bool exists() const noexcept {return IsWindow(hWnd);}

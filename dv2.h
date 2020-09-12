@@ -14,6 +14,9 @@
 #include <memory>
 #include <unordered_map>
 
+#include <sstream>
+#include <iomanip>
+
 using Microsoft::WRL::ComPtr;
 
 /* Länka med:
@@ -57,6 +60,8 @@ private:
 	float width;
 	float height;
 
+	HWND hWnd;
+
 	ComPtr<IDXGISwapChain> swap;
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
@@ -68,16 +73,20 @@ private:
 	ComPtr<ID3D11VertexShader> vertexShader;
 	ComPtr<ID3D11InputLayout> inputLayout;
 	ComPtr<ID3D11BlendState> blendState;
+	ComPtr<ID3D11SamplerState> samplerState;
 
     ComPtr<IWICImagingFactory> wicFactory;
-	ComPtr<ID3D11SamplerState> samplerState;
+
+	void createSwapChain();
+	void destroySwapChain();
 public:
 	DV2(HWND hWnd);
 
 	DV2(const DV2&) = delete;
 	DV2& operator=(const DV2&) = delete;
 
-	void setSize(float width, float height);
+	void resize();
+	void setFullscreen(bool on);
 
 	Texture createTexture(const wchar_t* filename);
 

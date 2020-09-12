@@ -452,56 +452,20 @@ Texture::Texture(const wchar_t* filename, ID3D11Device* device, IWICImagingFacto
 		throw Exception("Failed to create texture view");
 }
 
-DV2::DV2(HWND hWnd)
-	: swap(nullptr),
-	  device(nullptr),
-	  context(nullptr)
+void DV2::createSwapChain()
 {
-	DXGI_SWAP_CHAIN_DESC sd{};
-	sd.BufferDesc.Width = 0;
-	sd.BufferDesc.Height = 0;
-	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = 0;
-	sd.BufferDesc.RefreshRate.Denominator = 0;
-	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.BufferCount = 1;
-	sd.OutputWindow = hWnd;
-	sd.Windowed = TRUE;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	sd.Flags = 0;
-
-	if (FAILED(D3D11CreateDeviceAndSwapChain(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		0,
-		nullptr,
-		0,
-		D3D11_SDK_VERSION,
-		&sd,
-		&swap,
-		&device,
-		nullptr,
-		&context
-	))) throw Exception("Failed to initialise Direct3D 11");
-
-	ID3D11Resource* backBuffer = nullptr;
+	ComPtr<ID3D11Resource> backBuffer;
 	if (FAILED(swap->GetBuffer(
 		0,
 		__uuidof(ID3D11Resource),
-		reinterpret_cast<void**>(&backBuffer)
+		&backBuffer
 	))) throw Exception("Failed to get back buffer");
 
 	if (FAILED(device->CreateRenderTargetView(
-		backBuffer,
+		backBuffer.Get(),
 		nullptr,
 		&target
 	))) throw Exception("Failed to create render target view");
-
 	
 	struct Vertex
 	{
@@ -602,17 +566,17 @@ DV2::DV2(HWND hWnd)
 
 	RECT wndSize;
 	if (!GetClientRect(hWnd, &wndSize)) throw Exception("Failed to get window size");
-	setSize(wndSize.right, wndSize.bottom);
-
-    if (FAILED(
-        CoCreateInstance(
-            CLSID_WICImagingFactory,
-			nullptr,
-			CLSCTX_INPROC_SERVER,
-			__uuidof(IWICImagingFactory),
-			&wicFactory
-        )
-    )) throw Exception("Failed to create WIC factory");
+	this->width = wndSize.right;
+	this->height = wndSize.bottom;
+	
+	D3D11_VIEWPORT vp{};
+	vp.Width = width;
+	vp.Height = height;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	context->RSSetViewports(1, &vp);
 
 	D3D11_SAMPLER_DESC samplerDesc{};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -638,19 +602,78 @@ DV2::DV2(HWND hWnd)
 	context->OMSetBlendState(blendState.Get(), blendFactor, 0xffffffff);
 }
 
-void DV2::setSize(float width, float height)
+void DV2::destroySwapChain()
 {
-	this->width = width;
-	this->height = height;
-	
-	D3D11_VIEWPORT vp{};
-	vp.Width = width;
-	vp.Height = height;
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	context->RSSetViewports(1, &vp);
+	samplerState.Reset();
+	blendState.Reset();
+	inputLayout.Reset();
+	vertexShader.Reset();
+	pixelShader.Reset();
+	matrixBuffer.Reset();
+	vertexBuffer.Reset();
+
+	target.Reset();
+}
+
+DV2::DV2(HWND hWnd)
+	: hWnd(hWnd)
+{
+	DXGI_SWAP_CHAIN_DESC sd{};
+	sd.BufferDesc.Width = 0;
+	sd.BufferDesc.Height = 0;
+	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 0;
+	sd.BufferDesc.RefreshRate.Denominator = 0;
+	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.BufferCount = 1;
+	sd.OutputWindow = hWnd;
+	sd.Windowed = TRUE;
+	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+	if (FAILED(D3D11CreateDeviceAndSwapChain(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		0,
+		nullptr,
+		0,
+		D3D11_SDK_VERSION,
+		&sd,
+		&swap,
+		&device,
+		nullptr,
+		&context
+	))) throw Exception("Failed to initialise Direct3D 11");
+
+	createSwapChain();
+
+    if (FAILED(
+        CoCreateInstance(
+            CLSID_WICImagingFactory,
+			nullptr,
+			CLSCTX_INPROC_SERVER,
+			__uuidof(IWICImagingFactory),
+			&wicFactory
+        )
+    )) throw Exception("Failed to create WIC factory");
+}
+
+void DV2::resize()
+{
+	destroySwapChain();
+	context->ClearState();
+	if (FAILED(swap->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0))) throw Exception("Failed to resize buffers");
+	createSwapChain();
+}
+
+void DV2::setFullscreen(bool on)
+{
+	if (FAILED(swap->SetFullscreenState(on, nullptr))) throw Exception("Failed to set fullscreen state");
 }
 
 Texture DV2::createTexture(const wchar_t* filename)

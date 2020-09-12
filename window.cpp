@@ -57,15 +57,15 @@ Window::Mouse::Event Window::Mouse::getEvent() noexcept
 	return event;
 }
 
-Window::Window(const wchar_t* title, int width, int height)
+inline HWND Window::createWindow(const wchar_t* title, int width, int height)
 {
 	if (!wndClass.succeeded) throw Exception("Failed to register window class");
 
-	hWnd = CreateWindowExW(
+	HWND hWnd = CreateWindowExW(
 		0,
 		WndClass::className,
 		title,
-		WS_SYSMENU | WS_CAPTION,
+		WS_SYSMENU | WS_CAPTION | WS_THICKFRAME,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		width,
@@ -76,7 +76,18 @@ Window::Window(const wchar_t* title, int width, int height)
 		this
 	);
 	if (!hWnd) throw Exception("Failed to create window");
+
 	ShowWindow(hWnd, SW_SHOW);
+
+	return hWnd;
+}
+
+Window::Window(const wchar_t* title, int width, int height)
+	: dv2Created(false),
+	  hWnd(createWindow(title, width, height)),
+	  dv2(hWnd)
+{
+	dv2Created = true;
 }
 
 Window::~Window()
@@ -87,7 +98,17 @@ Window::~Window()
 void Window::update() noexcept
 {
 	MSG msg;
-	if (PeekMessageW(&msg, hWnd, 0, 0, PM_REMOVE))
+	while (PeekMessageW(&msg, hWnd, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessageW(&msg);
+	}
+}
+
+void Window::updateBlocking() noexcept
+{
+	MSG msg;
+	if (GetMessageW(&msg, hWnd, 0, 0) > 0)
 	{
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
@@ -178,16 +199,29 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		return 0;
 		case WM_MOUSEHWHEEL:
 		{
-			mouse.x = GET_X_LPARAM(lParam);
-			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_HSCROLL));
+			POINT clientPos = {0, 0};
+			if (ClientToScreen(hWnd, &clientPos))
+			{
+				mouse.x = GET_X_LPARAM(lParam) - clientPos.x;
+				mouse.y = GET_Y_LPARAM(lParam) - clientPos.y;
+				mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_HSCROLL));
+			}
 		}
 		return 0;
 		case WM_MOUSEWHEEL:
 		{
-			mouse.x = GET_X_LPARAM(lParam);
-			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_VSCROLL));
+			POINT clientPos = {0, 0};
+			if (ClientToScreen(hWnd, &clientPos))
+			{
+				mouse.x = GET_X_LPARAM(lParam) - clientPos.x;
+				mouse.y = GET_Y_LPARAM(lParam) - clientPos.y;
+				mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_VSCROLL));
+			}
+		}
+		return 0;
+		case WM_SIZE:
+		{
+			if (dv2Created) dv2.resize();
 		}
 		return 0;
 	}

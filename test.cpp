@@ -11,10 +11,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 {
 	try
 	{
-		Window w(L"Test", 800, 500);
-		DV2 dv2(w.getHwnd());
+		Window w(L"Test", 500, 500);
 
-		Texture froody = dv2.createTexture(L"froody.png");
+		Texture froody = w.dv2.createTexture(L"froody.png");
 
 		double k = 0.0;
 		double s = 1.0 / 25.0;
@@ -27,21 +26,33 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			{
 				if (wme.type == WMET_VSCROLL)
 				{
-					s += wme.scroll / 120.0 / 100.0;
+					s += wme.scroll / 120.0 / 10.0;
+				}
+				else if (wme.type == WMET_LMOUSEUP)
+				{
+					w.dv2.setFullscreen(true);
+				}
+				else if (wme.type == WMET_RMOUSEUP)
+				{
+					w.dv2.setFullscreen(false);
+				}
+				else if (wme.type == WMET_MMOUSEDOWN)
+				{
+					w.dv2.resize();
 				}
 			}
-			k += s;
+			k += s * t.getDelta();
 
-			dv2.clear({1.0f, 1.0f, 1.0f, 1.0f});
+			w.dv2.clear({1.0f, 1.0f, 1.0f, 1.0f});
 
 			for (int i = 0; i < 100; i++)
-				dv2.draw(
+				w.dv2.draw(
 					froody,
-					dv2.clientToDVX(w.mouse.getX()), dv2.clientToDVY(w.mouse.getY()),
+					w.dv2.clientToDVX(w.mouse.getX()), w.dv2.clientToDVY(w.mouse.getY()),
 					k
 				);
 
-			dv2.present();
+			w.dv2.presentSync();
 			w.update();
 			t.endFrame();
 			sum += t.getFramerate();
@@ -52,7 +63,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		{
 			std::wstringstream ss;
 			ss << (sum / n);
-			MessageBoxW(nullptr, ss.str().c_str(), L"eeeriewfk", 0);
+			MessageBoxW(nullptr, ss.str().c_str(), L"Framerate", 0);
 		}
 	}
 	catch (const std::exception& e)
