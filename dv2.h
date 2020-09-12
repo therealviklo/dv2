@@ -12,10 +12,6 @@
 #include <directxmath.h>
 #include <wincodec.h>
 #include <memory>
-#include <unordered_map>
-
-#include <sstream>
-#include <iomanip>
 
 using Microsoft::WRL::ComPtr;
 
@@ -65,6 +61,7 @@ private:
 	ComPtr<IDXGISwapChain> swap;
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
+
 	ComPtr<ID3D11RenderTargetView> target;
 	
 	ComPtr<ID3D11Buffer> vertexBuffer;
@@ -81,6 +78,7 @@ private:
 	void destroySwapChain();
 public:
 	DV2(HWND hWnd);
+	~DV2();
 
 	DV2(const DV2&) = delete;
 	DV2& operator=(const DV2&) = delete;

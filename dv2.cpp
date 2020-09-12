@@ -663,6 +663,14 @@ DV2::DV2(HWND hWnd)
     )) throw Exception("Failed to create WIC factory");
 }
 
+DV2::~DV2()
+{
+	try
+	{
+		swap->SetFullscreenState(false, nullptr);
+	} catch (...) {}
+}
+
 void DV2::resize()
 {
 	destroySwapChain();
