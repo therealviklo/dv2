@@ -633,7 +633,7 @@ DV2::DV2(HWND hWnd)
 	sd.OutputWindow = hWnd;
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	sd.Flags = 0;
 
 	if (FAILED(D3D11CreateDeviceAndSwapChain(
 		nullptr,
