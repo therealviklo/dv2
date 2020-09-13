@@ -61,7 +61,7 @@ private:
 
 	HWND hWnd;
 
-	inline HWND createWindow(const wchar_t* title, int width, int height);
+	inline HWND createWindow(const wchar_t* title, int width, int height, bool resizeable);
 public:
 	class Keyboard
 	{
@@ -131,7 +131,7 @@ public:
 	} mouse;
 	DV2 dv2;
 
-	Window(const wchar_t* title, int width, int height);
+	Window(const wchar_t* title, int width, int height, bool resizeable = false);
 	~Window();
 
 	Window(const Window&) = delete;

@@ -57,7 +57,7 @@ Window::Mouse::Event Window::Mouse::getEvent() noexcept
 	return event;
 }
 
-inline HWND Window::createWindow(const wchar_t* title, int width, int height)
+inline HWND Window::createWindow(const wchar_t* title, int width, int height, bool resizeable)
 {
 	if (!wndClass.succeeded) throw Exception("Failed to register window class");
 
@@ -65,7 +65,7 @@ inline HWND Window::createWindow(const wchar_t* title, int width, int height)
 		0,
 		WndClass::className,
 		title,
-		WS_SYSMENU | WS_CAPTION | WS_THICKFRAME,
+		WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | (resizeable ? WS_THICKFRAME | WS_MAXIMIZEBOX : 0),
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		width,
@@ -82,9 +82,9 @@ inline HWND Window::createWindow(const wchar_t* title, int width, int height)
 	return hWnd;
 }
 
-Window::Window(const wchar_t* title, int width, int height)
+Window::Window(const wchar_t* title, int width, int height, bool resizeable)
 	: dv2Created(false),
-	  hWnd(createWindow(title, width, height)),
+	  hWnd(createWindow(title, width, height, resizeable)),
 	  dv2(hWnd)
 {
 	dv2Created = true;

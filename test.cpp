@@ -11,7 +11,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 {
 	try
 	{
-		Window w(L"Test", 500, 500);
+		Window w(L"Test", 500, 500, true);
 
 		Texture froody = w.dv2.createTexture(L"froody.png");
 
@@ -20,7 +20,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		double sum = 0.0;
 		int n = 0;
 		std::wstringstream ss;
-		Timer t;
+		NoWaitTimer t;
 		while (w.exists())
 		{
 			Window::Keyboard::Event wke;
