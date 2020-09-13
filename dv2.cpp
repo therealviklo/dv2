@@ -755,3 +755,53 @@ void DV2::presentNoSync()
 {
 	swap->Present(0, 0);
 }
+
+void DV2::changeScreenResolution(int width, int height)
+{
+	DEVMODEW devMode{};
+	devMode.dmSize = sizeof(devMode);
+	devMode.dmPelsWidth = width;
+	devMode.dmPelsHeight = height;
+	devMode.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
+	LONG res = ChangeDisplaySettingsW(&devMode, CDS_FULLSCREEN);
+	switch (res)
+	{
+		case DISP_CHANGE_BADDUALVIEW:
+		{
+			throw Exception("Could not change the screen resolution because the system is DualView capable.");
+		}
+		break;
+		case DISP_CHANGE_BADFLAGS:
+		{
+			throw Exception("Could not change the screen resolution because the flags were invalid.");
+		}
+		break;
+		case DISP_CHANGE_BADMODE:
+		{
+			throw Exception("Could not change the screen resolution because the screen resolution is not supported.");
+		}
+		break;
+		case DISP_CHANGE_BADPARAM:
+		{
+			throw Exception("Could not change the screen resolution because the parameters were invalid.");
+		}
+		break;
+		case DISP_CHANGE_FAILED:
+		{
+			throw Exception("Could not change the screen resolution because the display driver failed the graphics mode.");
+		}
+		break;
+		case DISP_CHANGE_NOTUPDATED:
+		{
+			throw Exception("Could not change the screen resolution because the settings could not be written to the registry.");
+		}
+		break;
+		case DISP_CHANGE_RESTART:
+		{
+			throw Exception("The computer must be restarted for the change to go into effect.");
+		}
+		break;
+		default:
+		break;
+	}
+}

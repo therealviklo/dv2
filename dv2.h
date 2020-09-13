@@ -194,4 +194,6 @@ public:
 	{
 		return (-height / 2.0f - y) / 2.0f;
 	}
+
+	static void changeScreenResolution(int width, int height);
 };
