@@ -19,9 +19,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		double s = 1.0 / 25.0;
 		double sum = 0.0;
 		int n = 0;
+		std::wstringstream ss;
 		Timer t;
 		while (w.exists())
 		{
+			Window::Keyboard::Event wke;
 			for (Window::Mouse::Event wme = w.mouse.getEvent(); wme.type != WMET_INVALID; wme = w.mouse.getEvent())
 			{
 				if (wme.type == WMET_VSCROLL)
@@ -39,6 +41,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 				else if (wme.type == WMET_MMOUSEDOWN)
 				{
 					w.dv2.resize();
+				}
+			}
+			for (Window::Keyboard::Event wke = w.keyboard.getEvent(); wke.type != WKET_INVALID; wke = w.keyboard.getEvent())
+			{
+				if (wke.type == WKET_KEYDOWN && wke.key == VK_RETURN)
+				{
+					MessageBoxW(nullptr, ss.str().c_str(), L"Text", 0);
+					w.keyboard.clearEvents();
+				}
+				else if (wke.type == WKET_CHAR)
+				{
+					ss << wke.character;
 				}
 			}
 			k += s * t.getDelta();

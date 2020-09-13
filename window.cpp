@@ -137,6 +137,11 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			keyboard.addEvent(Keyboard::Event(wParam, WKET_KEYUP));
 		}
 		return 0;
+		case WM_CHAR:
+		{
+			keyboard.addEvent(Keyboard::Event(wParam));
+		}
+		return 0;
 		case WM_KILLFOCUS:
 		{
 			keyboard.clearKeyStates();
@@ -221,7 +226,17 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		return 0;
 		case WM_SIZE:
 		{
-			if (dv2Created) dv2.resize();
+			if (dv2Created)
+			{
+				try
+				{
+					dv2.resize();
+				}
+				catch (...)
+				{
+					DestroyWindow(hWnd);
+				}
+			}
 		}
 		return 0;
 	}

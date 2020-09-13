@@ -17,7 +17,8 @@ enum WKET
 {
 	WKET_INVALID,
 	WKET_KEYDOWN,
-	WKET_KEYUP
+	WKET_KEYUP,
+	WKET_CHAR
 };
 
 enum WMET
@@ -68,10 +69,17 @@ public:
 	public:
 		struct Event
 		{
-			uint8_t key;
+			union
+			{
+				// Används av alla eventtyper förutom WKET_CHAR.
+				uint8_t key;
+				// Används bara av WKET_CHAR.
+				wchar_t character;
+			};
 			WKET type;
 
 			Event(uint8_t key, WKET type) noexcept : key(key), type(type) {}
+			explicit Event(wchar_t character) noexcept : character(character), type(WKET_CHAR) {}
 			Event() noexcept : key(0), type(WKET_INVALID) {}
 		};
 	private:
