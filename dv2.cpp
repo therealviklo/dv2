@@ -751,6 +751,11 @@ void DV2::presentSync()
 	swap->Present(1, 0);
 }
 
+void DV2::presentSync(unsigned int syncInterval)
+{
+	swap->Present(syncInterval, 0);
+}
+
 void DV2::presentNoSync()
 {
 	swap->Present(0, 0);

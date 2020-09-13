@@ -175,6 +175,8 @@ public:
 
 	// Synkar med refreshraten.
 	void presentSync();
+	// 1 -> synka med refreshraten, 2 -> synka med 1/2 av refreshraten, 3 -> 1/3 etc.
+	void presentSync(unsigned int syncInterval);
 	// Ingen synkning, visar direkt.
 	void presentNoSync();
 
