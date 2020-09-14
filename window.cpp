@@ -10,7 +10,7 @@ Window::WndClass::WndClass() noexcept
 	wndClass.style = CS_OWNDC;
 	wndClass.lpfnWndProc = DV2SetupWndProc;
 	wndClass.hInstance = GetModuleHandleW(nullptr);
-	wndClass.hCursor = LoadCursorW(GetModuleHandleW(nullptr), reinterpret_cast<const wchar_t*>(IDC_ARROW));
+	wndClass.hCursor = LoadCursorW(nullptr, reinterpret_cast<const wchar_t*>(IDC_ARROW));
 	wndClass.lpszClassName = className;
 
 	/* RegisterClassExW() returnerar noll om den misslyckas, vilket konverteras till false.
