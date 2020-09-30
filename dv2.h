@@ -51,6 +51,7 @@ public:
 	{
 	public:
 		Exception(const char* msg) : std::runtime_error(msg) {}
+		virtual ~Exception() = default;
 	};
 	class NoFullscreenChange : public Exception
 	{
