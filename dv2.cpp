@@ -638,6 +638,22 @@ DV2::DV2(HWND hWnd)
 		nullptr,
 		&context
 	))) throw Exception("Failed to initialise Direct3D 11");
+	
+	{
+		ComPtr<IDXGIDevice> dxgiDevice;
+		if (FAILED(device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice)))
+			throw Exception("Failed to get DXGI device");
+
+		ComPtr<IDXGIAdapter> dxgiAdapter;
+		if (FAILED(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter)))
+			throw Exception("Failed to get DXGI adapter");
+
+		ComPtr<IDXGIFactory> dxgiFactory;
+		if (FAILED(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory)))
+			throw Exception("Failed to get DXGI factory");
+
+		dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_PRINT_SCREEN);
+	}
 
 	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd);
 
