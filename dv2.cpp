@@ -452,7 +452,9 @@ Texture::Texture(const wchar_t* filename, ID3D11Device* device, IWICImagingFacto
 		throw Exception("Failed to create texture view");
 }
 
-void DV2::createSwapChain()
+DV2::SwapChain::SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11DeviceContext* context, HWND hWnd)
+	: width(0),
+	  height(0)
 {
 	ComPtr<ID3D11Resource> backBuffer;
 	if (FAILED(swap->GetBuffer(
@@ -602,19 +604,6 @@ void DV2::createSwapChain()
 	context->OMSetBlendState(blendState.Get(), blendFactor, 0xffffffff);
 }
 
-void DV2::destroySwapChain()
-{
-	samplerState.Reset();
-	blendState.Reset();
-	inputLayout.Reset();
-	vertexShader.Reset();
-	pixelShader.Reset();
-	matrixBuffer.Reset();
-	vertexBuffer.Reset();
-
-	target.Reset();
-}
-
 DV2::DV2(HWND hWnd)
 	: hWnd(hWnd)
 {
@@ -650,7 +639,7 @@ DV2::DV2(HWND hWnd)
 		&context
 	))) throw Exception("Failed to initialise Direct3D 11");
 
-	createSwapChain();
+	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd);
 
     if (FAILED(
         CoCreateInstance(
@@ -673,10 +662,10 @@ DV2::~DV2()
 
 void DV2::resize()
 {
-	destroySwapChain();
+	swapChain.reset();
 	context->ClearState();
 	if (FAILED(swap->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0))) throw Exception("Failed to resize buffers");
-	createSwapChain();
+	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd);
 }
 
 void DV2::setFullscreen(bool on)
@@ -700,13 +689,13 @@ Texture DV2::createTexture(const wchar_t* filename)
 void DV2::clear()
 {
 	const float clrArr[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	context->ClearRenderTargetView(target.Get(), clrArr);
+	context->ClearRenderTargetView(swapChain->target.Get(), clrArr);
 }
 
 void DV2::clear(Colour clr)
 {
 	const float clrArr[] = {clr.r, clr.g, clr.b, clr.a};
-	context->ClearRenderTargetView(target.Get(), clrArr);
+	context->ClearRenderTargetView(swapChain->target.Get(), clrArr);
 }
 
 void DV2::draw(
@@ -732,16 +721,16 @@ void DV2::draw(
 		DirectX::XMMatrixScaling(width, height, 1.0f) *
 		DirectX::XMMatrixRotationZ(angle) *
 		DirectX::XMMatrixTranslation(x, y, 0.0f) *
-		DirectX::XMMatrixScaling(1.0f / this->width, 1.0f / this->height, 1.0f)
+		DirectX::XMMatrixScaling(1.0f / swapChain->width, 1.0f / swapChain->height, 1.0f)
 	);
 	mtcs.texmtx = DirectX::XMMatrixTranspose(
 		DirectX::XMMatrixScaling(texture.width / srcWidth, texture.height / srcHeight, 1.0f) *
 		DirectX::XMMatrixTranslation(srcX / texture.width, srcY / texture.height, 0.0f)
 	);
 	D3D11_MAPPED_SUBRESOURCE msr;
-	if (FAILED(context->Map(matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr))) throw Exception("Failed to map buffer");
+	if (FAILED(context->Map(swapChain->matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr))) throw Exception("Failed to map buffer");
 	memcpy(msr.pData, &mtcs, sizeof(mtcs));
-	context->Unmap(matrixBuffer.Get(), 0);
+	context->Unmap(swapChain->matrixBuffer.Get(), 0);
 
 	context->Draw(6, 0);
 }

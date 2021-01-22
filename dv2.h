@@ -12,6 +12,7 @@
 #include <directxmath.h>
 #include <wincodec.h>
 #include <memory>
+#include <optional>
 
 using Microsoft::WRL::ComPtr;
 
@@ -59,29 +60,33 @@ public:
 		NoFullscreenChange() : Exception("Unable to change fullscreen state") {}
 	};
 private:
-	float width;
-	float height;
-
 	HWND hWnd;
 
 	ComPtr<IDXGISwapChain> swap;
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
 
-	ComPtr<ID3D11RenderTargetView> target;
+	class SwapChain
+	{
+	public:
+		float width;
+		float height;
+		
+		ComPtr<ID3D11RenderTargetView> target;
+		
+		ComPtr<ID3D11Buffer> vertexBuffer;
+		ComPtr<ID3D11Buffer> matrixBuffer;
+		ComPtr<ID3D11PixelShader> pixelShader;
+		ComPtr<ID3D11VertexShader> vertexShader;
+		ComPtr<ID3D11InputLayout> inputLayout;
+		ComPtr<ID3D11BlendState> blendState;
+		ComPtr<ID3D11SamplerState> samplerState;
+
+		SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11DeviceContext* context, HWND hWnd);
+	};
+	std::optional<SwapChain> swapChain;
 	
-	ComPtr<ID3D11Buffer> vertexBuffer;
-	ComPtr<ID3D11Buffer> matrixBuffer;
-	ComPtr<ID3D11PixelShader> pixelShader;
-	ComPtr<ID3D11VertexShader> vertexShader;
-	ComPtr<ID3D11InputLayout> inputLayout;
-	ComPtr<ID3D11BlendState> blendState;
-	ComPtr<ID3D11SamplerState> samplerState;
-
-    ComPtr<IWICImagingFactory> wicFactory;
-
-	void createSwapChain();
-	void destroySwapChain();
+	ComPtr<IWICImagingFactory> wicFactory;
 public:
 	DV2(HWND hWnd);
 	~DV2();
@@ -183,19 +188,19 @@ public:
 
 	float clientToDVX(float x) const noexcept
 	{
-		return (x - width / 2.0f) * 2.0f;
+		return (x - swapChain->width / 2.0f) * 2.0f;
 	}
 	float DVToClientX(float x) const noexcept
 	{
-		return (x + width / 2.0f) / 2.0f;
+		return (x + swapChain->width / 2.0f) / 2.0f;
 	}
 	float clientToDVY(float y) const noexcept
 	{
-		return (height / 2.0f - y) * 2.0f;
+		return (swapChain->height / 2.0f - y) * 2.0f;
 	}
 	float DVToClientY(float y) const noexcept
 	{
-		return (-height / 2.0f - y) / 2.0f;
+		return (-swapChain->height / 2.0f - y) / 2.0f;
 	}
 
 	static void changeScreenResolution(int width, int height);
