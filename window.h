@@ -11,6 +11,8 @@
 #include <bitset>
 #include <array>
 #include <cstdint>
+#include <memory>
+#include <type_traits>
 #include "dv2.h"
 
 namespace WKET
@@ -40,6 +42,15 @@ namespace WMET
 	};
 }
 
+struct WndDeleter
+{
+	constexpr void operator()(HWND hWnd) const noexcept
+	{
+		if (hWnd) DestroyWindow(hWnd);
+	}
+};
+using UWnd = std::unique_ptr<std::remove_pointer_t<HWND>, WndDeleter>;
+
 class Window
 {
 public:
@@ -65,9 +76,7 @@ private:
 
 	bool dv2Created;
 
-	HWND hWnd;
-
-	inline HWND createWindow(const wchar_t* title, int width, int height, bool resizeable);
+	UWnd hWnd;
 public:
 	class Keyboard
 	{
@@ -138,7 +147,6 @@ public:
 	DV2 dv2;
 
 	Window(const wchar_t* title, int width, int height, bool resizeable = false);
-	~Window();
 
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
@@ -146,8 +154,8 @@ public:
 	void update() noexcept;
 	void updateBlocking() noexcept;
 
-	constexpr HWND getHwnd() noexcept {return hWnd;}
-	bool exists() const noexcept {return IsWindow(hWnd);}
+	constexpr HWND getHwnd() noexcept { return hWnd.get(); }
+	bool exists() const noexcept { return hWnd.get(); }
 
 	LRESULT wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	

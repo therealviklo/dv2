@@ -57,48 +57,40 @@ Window::Mouse::Event Window::Mouse::getEvent() noexcept
 	return event;
 }
 
-inline HWND Window::createWindow(const wchar_t* title, int width, int height, bool resizeable)
-{
-	if (!wndClass.succeeded) throw Exception("Failed to register window class");
-
-	HWND hWnd = CreateWindowExW(
-		0,
-		WndClass::className,
-		title,
-		WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | (resizeable ? WS_THICKFRAME | WS_MAXIMIZEBOX : 0),
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		width,
-		height,
-		nullptr,
-		nullptr,
-		GetModuleHandleW(nullptr),
-		this
-	);
-	if (!hWnd) throw Exception("Failed to create window");
-
-	ShowWindow(hWnd, SW_SHOW);
-
-	return hWnd;
-}
-
 Window::Window(const wchar_t* title, int width, int height, bool resizeable)
 	: dv2Created(false),
-	  hWnd(createWindow(title, width, height, resizeable)),
-	  dv2(hWnd)
+	  hWnd([&]{
+		if (!wndClass.succeeded) throw Exception("Failed to register window class");
+
+		HWND hWnd = CreateWindowExW(
+			0,
+			WndClass::className,
+			title,
+			WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | (resizeable ? WS_THICKFRAME | WS_MAXIMIZEBOX : 0),
+			CW_USEDEFAULT,
+			CW_USEDEFAULT,
+			width,
+			height,
+			nullptr,
+			nullptr,
+			GetModuleHandleW(nullptr),
+			this
+		);
+		if (!hWnd) throw Exception("Failed to create window");
+
+		ShowWindow(hWnd, SW_SHOW);
+
+		return hWnd;
+	  }()),
+	  dv2(hWnd.get())
 {
 	dv2Created = true;
-}
-
-Window::~Window()
-{
-	if (IsWindow(hWnd)) DestroyWindow(hWnd);
 }
 
 void Window::update() noexcept
 {
 	MSG msg;
-	while (PeekMessageW(&msg, hWnd, 0, 0, PM_REMOVE))
+	while (PeekMessageW(&msg, hWnd.get(), 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
@@ -108,7 +100,7 @@ void Window::update() noexcept
 void Window::updateBlocking() noexcept
 {
 	MSG msg;
-	if (GetMessageW(&msg, hWnd, 0, 0) > 0)
+	if (GetMessageW(&msg, hWnd.get(), 0, 0) > 0)
 	{
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
@@ -234,9 +226,14 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				}
 				catch (...)
 				{
-					DestroyWindow(hWnd);
+					this->hWnd.reset();
 				}
 			}
+		}
+		return 0;
+		case WM_DESTROY:
+		{
+			this->hWnd.release();
 		}
 		return 0;
 	}
