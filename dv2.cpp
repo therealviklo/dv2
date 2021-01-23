@@ -652,7 +652,7 @@ DV2::DV2(HWND hWnd)
 		if (FAILED(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory)))
 			throw Exception("Failed to get DXGI factory");
 
-		dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_PRINT_SCREEN);
+		dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_PRINT_SCREEN | DXGI_MWA_NO_WINDOW_CHANGES);
 	}
 
 	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd);
