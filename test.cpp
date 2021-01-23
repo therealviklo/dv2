@@ -23,34 +23,33 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		NoWaitTimer t;
 		while (w.exists())
 		{
-			Window::Keyboard::Event wke;
-			for (Window::Mouse::Event wme = w.mouse.getEvent(); wme.type != WMET_INVALID; wme = w.mouse.getEvent())
+			for (WME wme = w.mouse.getEvent(); wme.type != WMET::invalid; wme = w.mouse.getEvent())
 			{
-				if (wme.type == WMET_VSCROLL)
+				if (wme.type == WMET::vscroll)
 				{
 					s += wme.scroll / 120.0 / 10.0;
 				}
-				else if (wme.type == WMET_LMOUSEUP)
+				else if (wme.type == WMET::lmouseup)
 				{
 					w.dv2.setFullscreen(true);
 				}
-				else if (wme.type == WMET_RMOUSEUP)
+				else if (wme.type == WMET::rmouseup)
 				{
 					w.dv2.setFullscreen(false);
 				}
-				else if (wme.type == WMET_MMOUSEDOWN)
+				else if (wme.type == WMET::mmousedown)
 				{
 					w.dv2.resize();
 				}
 			}
-			for (Window::Keyboard::Event wke = w.keyboard.getEvent(); wke.type != WKET_INVALID; wke = w.keyboard.getEvent())
+			for (WKE wke = w.keyboard.getEvent(); wke.type != WKET::invalid; wke = w.keyboard.getEvent())
 			{
-				if (wke.type == WKET_KEYDOWN && wke.key == VK_RETURN)
+				if (wke.type == WKET::keydown && wke.key == VK_RETURN)
 				{
 					MessageBoxW(nullptr, ss.str().c_str(), L"Text", 0);
 					w.keyboard.clearEvents();
 				}
-				else if (wke.type == WKET_CHAR)
+				else if (wke.type == WKET::character)
 				{
 					ss << wke.character;
 				}

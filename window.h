@@ -13,26 +13,32 @@
 #include <cstdint>
 #include "dv2.h"
 
-enum WKET
+namespace WKET
 {
-	WKET_INVALID,
-	WKET_KEYDOWN,
-	WKET_KEYUP,
-	WKET_CHAR
-};
+	enum type
+	{
+		invalid,
+		keydown,
+		keyup,
+		character
+	};
+}
 
-enum WMET
+namespace WMET
 {
-	WMET_INVALID,
-	WMET_LMOUSEDOWN,
-	WMET_LMOUSEUP,
-	WMET_RMOUSEDOWN,
-	WMET_RMOUSEUP,
-	WMET_MMOUSEDOWN,
-	WMET_MMOUSEUP,
-	WMET_HSCROLL,
-	WMET_VSCROLL
-};
+	enum type
+	{
+		invalid,
+		lmousedown,
+		lmouseup,
+		rmousedown,
+		rmouseup,
+		mmousedown,
+		mmouseup,
+		hscroll,
+		vscroll
+	};
+}
 
 class Window
 {
@@ -76,11 +82,11 @@ public:
 				// Används bara av WKET_CHAR.
 				wchar_t character;
 			};
-			WKET type;
+			WKET::type type;
 
-			Event(uint8_t key, WKET type) noexcept : key(key), type(type) {}
-			explicit Event(wchar_t character) noexcept : character(character), type(WKET_CHAR) {}
-			Event() noexcept : key(0), type(WKET_INVALID) {}
+			Event(uint8_t key, WKET::type type) noexcept : key(key), type(type) {}
+			explicit Event(wchar_t character) noexcept : character(character), type(WKET::character) {}
+			Event() noexcept : key(0), type(WKET::invalid) {}
 		};
 	private:
 		std::bitset<0x100> keyStates;
@@ -106,11 +112,11 @@ public:
 			int y;
 			// Används bara med WMET_HSCROLL och WMET_VSCROLL.
 			int scroll;
-			WMET type;
+			WMET::type type;
 
-			Event(int x, int y, int scroll, WMET type) noexcept : x(x), y(y), scroll(scroll), type(type) {}
-			Event(int x, int y, WMET type) noexcept : x(x), y(y), scroll(0), type(type) {}
-			Event() noexcept : x(0), y(0), scroll(0), type(WMET_INVALID) {}
+			Event(int x, int y, int scroll, WMET::type type) noexcept : x(x), y(y), scroll(scroll), type(type) {}
+			Event(int x, int y, WMET::type type) noexcept : x(x), y(y), scroll(0), type(type) {}
+			Event() noexcept : x(0), y(0), scroll(0), type(WMET::invalid) {}
 		};
 	private:
 		int x;

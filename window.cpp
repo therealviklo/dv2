@@ -126,7 +126,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (wParam >= keyboard.keyStates.size()) return DefWindowProcW(hWnd, msg, wParam, lParam);
 
 			keyboard.keyStates[wParam] = true;
-			keyboard.addEvent(Keyboard::Event(wParam, WKET_KEYDOWN));
+			keyboard.addEvent(Keyboard::Event(wParam, WKET::keydown));
 		}
 		return 0;
 		case WM_KEYUP:
@@ -134,7 +134,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (wParam >= keyboard.keyStates.size()) return DefWindowProcW(hWnd, msg, wParam, lParam);
 
 			keyboard.keyStates[wParam] = false;
-			keyboard.addEvent(Keyboard::Event(wParam, WKET_KEYUP));
+			keyboard.addEvent(Keyboard::Event(wParam, WKET::keyup));
 		}
 		return 0;
 		case WM_CHAR:
@@ -159,7 +159,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (captureCount++ == 0) SetCapture(hWnd);
 			mouse.x = GET_X_LPARAM(lParam);
 			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_LMOUSEDOWN));
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET::lmousedown));
 		}
 		return 0;
 		case WM_LBUTTONUP:
@@ -167,7 +167,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (--captureCount == 0) ReleaseCapture();
 			mouse.x = GET_X_LPARAM(lParam);
 			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_LMOUSEUP));
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET::lmouseup));
 		}
 		return 0;
 		case WM_RBUTTONDOWN:
@@ -175,7 +175,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (captureCount++ == 0) SetCapture(hWnd);
 			mouse.x = GET_X_LPARAM(lParam);
 			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_RMOUSEDOWN));
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET::rmousedown));
 		}
 		return 0;
 		case WM_RBUTTONUP:
@@ -183,7 +183,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (--captureCount == 0) ReleaseCapture();
 			mouse.x = GET_X_LPARAM(lParam);
 			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_RMOUSEUP));
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET::rmouseup));
 		}
 		return 0;
 		case WM_MBUTTONDOWN:
@@ -191,7 +191,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (captureCount++ == 0) SetCapture(hWnd);
 			mouse.x = GET_X_LPARAM(lParam);
 			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_MMOUSEDOWN));
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET::mmousedown));
 		}
 		return 0;
 		case WM_MBUTTONUP:
@@ -199,7 +199,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (--captureCount == 0) ReleaseCapture();
 			mouse.x = GET_X_LPARAM(lParam);
 			mouse.y = GET_Y_LPARAM(lParam);
-			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET_MMOUSEUP));
+			mouse.addEvent(Mouse::Event(mouse.x, mouse.y, WMET::mmouseup));
 		}
 		return 0;
 		case WM_MOUSEHWHEEL:
@@ -209,7 +209,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				mouse.x = GET_X_LPARAM(lParam) - clientPos.x;
 				mouse.y = GET_Y_LPARAM(lParam) - clientPos.y;
-				mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_HSCROLL));
+				mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET::hscroll));
 			}
 		}
 		return 0;
@@ -220,7 +220,7 @@ LRESULT Window::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				mouse.x = GET_X_LPARAM(lParam) - clientPos.x;
 				mouse.y = GET_Y_LPARAM(lParam) - clientPos.y;
-				mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET_VSCROLL));
+				mouse.addEvent(Mouse::Event(mouse.x, mouse.y, GET_WHEEL_DELTA_WPARAM(wParam), WMET::vscroll));
 			}
 		}
 		return 0;
