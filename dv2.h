@@ -132,7 +132,7 @@ public:
 		float srcY,
 		float srcWidth,
 		float srcHeight
-	) {draw(texture, x, y, width, height, srcX, srcY, srcWidth, srcHeight, 0.0f);}
+	) { draw(texture, x, y, width, height, srcX, srcY, srcWidth, srcHeight, 0.0f); }
 	void draw(
 		Texture& texture,
 		float x,
@@ -140,14 +140,14 @@ public:
 		float width,
 		float height,
 		float angle
-	) {draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle);}
+	) { draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle); }
 	void draw(
 		Texture& texture,
 		float x,
 		float y,
 		float width,
 		float height
-	) {draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
+	) { draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f); }
 	void draw(
 		Texture& texture,
 		float x,
@@ -157,7 +157,7 @@ public:
 		float srcWidth,
 		float srcHeight,
 		float angle
-	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
+	) { draw(texture, x, y, srcWidth, srcHeight, srcX, srcY, srcWidth, srcHeight, angle); }
 	void draw(
 		Texture& texture,
 		float x,
@@ -166,18 +166,18 @@ public:
 		float srcY,
 		float srcWidth,
 		float srcHeight
-	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), srcX, srcY, srcWidth, srcHeight, 0.0f);}
+	) { draw(texture, x, y, srcWidth, srcHeight, srcX, srcY, srcWidth, srcHeight, 0.0f); }
 	void draw(
 		Texture& texture,
 		float x,
 		float y,
 		float angle
-	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle);}
+	) { draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle); }
 	void draw(
 		Texture& texture,
 		float x,
 		float y
-	) {draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f);}
+	) { draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f); }
 
 	// Synkar med refreshraten.
 	void presentSync();
