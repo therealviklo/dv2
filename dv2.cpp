@@ -499,16 +499,16 @@ DV2::SwapChain::SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11Devi
 
 	const struct {
 		float mtx[4][4] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
+			{1.0f, 0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f, 0.0f},
+			{0.0f, 0.0f, 1.0f, 0.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f}
 		};
 		float texmtx[4][4] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
+			{1.0f, 0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f, 0.0f},
+			{0.0f, 0.0f, 1.0f, 0.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f}
 		};
 	} mtcs;
 	D3D11_BUFFER_DESC mbd{};

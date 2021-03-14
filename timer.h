@@ -12,8 +12,8 @@ private:
 	double delta;
 public:
 	Timer(double framerate) noexcept :
-		waitTime(1.0 / framerate),
 		delta(waitTime),
+		waitTime(1.0 / framerate),
 		frameStartTime(TimerClock::now()) {}
 
 	Timer(const Timer&) = delete;
@@ -43,8 +43,8 @@ private:
 	double delta;
 public:
 	NoWaitTimer() noexcept :
-		delta(0.0),
-		frameStartTime(TimerClock::now()) {}
+		frameStartTime(TimerClock::now()),
+		delta(0.0) {}
 
 	void endFrame()
 	{
