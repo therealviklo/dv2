@@ -13,12 +13,14 @@
 #include <wincodec.h>
 #include <memory>
 #include <optional>
+#include <shlwapi.h>
 
 using Microsoft::WRL::ComPtr;
 
 /* Länka med:
    - user32
-   - d3d11 */
+   - d3d11
+   - shlwapi*/
 
 struct Colour
 {
@@ -40,6 +42,9 @@ private:
 	ComPtr<ID3D11ShaderResourceView> texView;
 
 	Texture(const wchar_t* filename, ID3D11Device* device, IWICImagingFactory* wicFactory);
+	Texture(const void* data, UINT size, ID3D11Device* device, IWICImagingFactory* wicFactory);
+	
+	void createTextureWithDecoder(IWICBitmapDecoder* decoder, ID3D11Device* device, IWICImagingFactory* wicFactory);
 public:
 	UINT getWidth() const noexcept {return width;}
 	UINT getHeight() const noexcept {return height;}
@@ -52,7 +57,6 @@ public:
 	{
 	public:
 		Exception(const char* msg) : std::runtime_error(msg) {}
-		virtual ~Exception() = default;
 	};
 	class NoFullscreenChange : public Exception
 	{
@@ -105,6 +109,8 @@ public:
 	   är en underklass till DV2::Exception.) */
 	void setFullscreen(bool on);
 
+	Texture createTexture(const void* data, UINT size);
+	Texture createTexture(const wchar_t* resource, const wchar_t* type);
 	Texture createTexture(const wchar_t* filename);
 
 	void clear();

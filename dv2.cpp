@@ -334,6 +334,36 @@ Texture::Texture(const wchar_t* filename, ID3D11Device* device, IWICImagingFacto
 		)
 	)) throw Exception("Failed to create decoder for image file");
 
+	createTextureWithDecoder(decoder.Get(), device, wicFactory);
+}
+
+Texture::Texture(const void* data, UINT size, ID3D11Device* device, IWICImagingFactory* wicFactory)
+{
+	using Exception = DV2::Exception;
+
+	ComPtr<IStream> stream(SHCreateMemStream(
+		(const BYTE*)data,
+		size
+	));
+	if (!stream) throw Exception("Failed to create IStream");
+
+	ComPtr<IWICBitmapDecoder> decoder;
+	if (FAILED(
+		wicFactory->CreateDecoderFromStream(
+			stream.Get(),
+			nullptr,
+			WICDecodeMetadataCacheOnDemand,
+			&decoder
+		)
+	)) throw Exception("Failed to create decoder for image file");
+
+	createTextureWithDecoder(decoder.Get(), device, wicFactory);
+}
+
+void Texture::createTextureWithDecoder(IWICBitmapDecoder* decoder, ID3D11Device* device, IWICImagingFactory* wicFactory)
+{
+	using Exception = DV2::Exception;
+
 	ComPtr<IWICBitmapFrameDecode> frame;
 	if (FAILED(
 		decoder->GetFrame(0, &frame)
@@ -695,6 +725,26 @@ void DV2::setFullscreen(bool on)
 	{
 		throw Exception("Failed to set fullscreen state");
 	}
+}
+
+Texture DV2::createTexture(const void* data, UINT size)
+{
+	return Texture(data, size, device.Get(), wicFactory.Get());
+}
+
+Texture DV2::createTexture(const wchar_t* resource, const wchar_t* type)
+{
+	HMODULE mod = GetModuleHandleW(nullptr);
+	if (!mod) throw Exception("Failed to get module handle");
+	HRSRC rsrc = FindResourceW(mod, resource, type);
+	if (!rsrc) throw Exception("Failed to find resource");
+	HGLOBAL glob = LoadResource(mod, rsrc);
+	if (!glob) throw Exception("Failed to load resource");
+	const void* data = LockResource(glob);
+	if (!data) throw Exception("Failed to get resource data pointer");
+	UINT size = SizeofResource(mod, rsrc);
+	if (!size) throw Exception("Failed to get resource size");
+	return createTexture(data, size);
 }
 
 Texture DV2::createTexture(const wchar_t* filename)
