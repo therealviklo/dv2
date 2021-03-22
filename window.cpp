@@ -25,19 +25,26 @@ Window::WndClass::~WndClass()
 
 void Window::Keyboard::addEvent(Event event) noexcept
 {
-	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), (events.size() - 1) * sizeof(events[0]));
-	events[0] = event;
+	if (events[setPos].type == WKET::invalid)
+	{
+		events[setPos] = event;
+		setPos = (setPos + 1) % events.size();
+	}
 }
 
 Window::Keyboard::Event Window::Keyboard::getEvent() noexcept
 {
-	Event event = events[events.size() - 1];
-	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), (events.size() - 1) * sizeof(events[0]));
-	events[0] = Event();
-	return event;
+	if (events[getPos].type != WKET::invalid)
+	{
+		const Event event = events[getPos];
+		events[getPos] = Event();
+		getPos = (getPos + 1) % events.size();
+		return event;
+	}
+	return Event();
 }
 
-constexpr bool Window::Keyboard::keyDown(uint8_t key) const
+bool Window::Keyboard::keyDown(uint8_t key) const
 {
 	if (key >= 0xff) throw Window::Exception("Keycode out of range");
 	return keyStates[key];
@@ -45,16 +52,23 @@ constexpr bool Window::Keyboard::keyDown(uint8_t key) const
 
 void Window::Mouse::addEvent(Event event) noexcept
 {
-	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), (events.size() - 1) * sizeof(events[0]));
-	events[0] = event;
+	if (events[setPos].type == WMET::invalid)
+	{
+		events[setPos] = event;
+		setPos = (setPos + 1) % events.size();
+	}
 }
 
 Window::Mouse::Event Window::Mouse::getEvent() noexcept
 {
-	Event event = events[events.size() - 1];
-	memmove(static_cast<void*>(&events[1]), static_cast<void*>(&events[0]), (events.size() - 1) * sizeof(events[0]));
-	events[0] = Event();
-	return event;
+	if (events[getPos].type != WMET::invalid)
+	{
+		const Event event = events[getPos];
+		events[getPos] = Event();
+		getPos = (getPos + 1) % events.size();
+		return event;
+	}
+	return Event();
 }
 
 Window::Window(const wchar_t* title, int width, int height, bool resizeable)

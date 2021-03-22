@@ -15,32 +15,26 @@
 #include <type_traits>
 #include "dv2.h"
 
-namespace WKET
+enum struct WKET
 {
-	enum type
-	{
-		invalid,
-		keydown,
-		keyup,
-		character
-	};
-}
+	invalid,
+	keydown,
+	keyup,
+	character
+};
 
-namespace WMET
+enum struct WMET
 {
-	enum type
-	{
-		invalid,
-		lmousedown,
-		lmouseup,
-		rmousedown,
-		rmouseup,
-		mmousedown,
-		mmouseup,
-		hscroll,
-		vscroll
-	};
-}
+	invalid,
+	lmousedown,
+	lmouseup,
+	rmousedown,
+	rmouseup,
+	mmousedown,
+	mmouseup,
+	hscroll,
+	vscroll
+};
 
 struct WndDeleter
 {
@@ -91,22 +85,24 @@ public:
 				// Används bara av WKET_CHAR.
 				wchar_t character;
 			};
-			WKET::type type;
+			WKET type;
 
-			Event(uint8_t key, WKET::type type) noexcept : key(key), type(type) {}
+			Event(uint8_t key, WKET type) noexcept : key(key), type(type) {}
 			explicit Event(wchar_t character) noexcept : character(character), type(WKET::character) {}
 			Event() noexcept : key(0), type(WKET::invalid) {}
 		};
 	private:
 		std::bitset<0x100> keyStates;
 		std::array<Event, 16> events;
+		unsigned getPos = 0;
+		unsigned setPos = 0;
 
 		void addEvent(Event event) noexcept;
 	public:
 		/* Returnerar det event som står först i kön. Om det inte finns några
 		   event returneras ett event med typen WKET_INVALID. */
 		Event getEvent() noexcept;
-		constexpr bool keyDown(uint8_t key) const;
+		bool keyDown(uint8_t key) const;
 
 		void clearKeyStates() noexcept {keyStates = decltype(keyStates)();}
 		void clearEvents() noexcept {events = decltype(events)();}
@@ -121,18 +117,20 @@ public:
 			int y;
 			// Används bara med WMET_HSCROLL och WMET_VSCROLL.
 			int scroll;
-			WMET::type type;
+			WMET type;
 
-			Event(int x, int y, int scroll, WMET::type type) noexcept : x(x), y(y), scroll(scroll), type(type) {}
-			Event(int x, int y, WMET::type type) noexcept : x(x), y(y), scroll(0), type(type) {}
+			Event(int x, int y, int scroll, WMET type) noexcept : x(x), y(y), scroll(scroll), type(type) {}
+			Event(int x, int y, WMET type) noexcept : x(x), y(y), scroll(0), type(type) {}
 			Event() noexcept : x(0), y(0), scroll(0), type(WMET::invalid) {}
 		};
 	private:
 		int x;
 		int y;
 		std::array<Event, 16> events;
+		unsigned getPos;
+		unsigned setPos;
 		
-		Mouse() noexcept : x(0), y(0) {}
+		Mouse() noexcept : x(0), y(0), getPos(0), setPos(0) {}
 
 		void addEvent(Event event) noexcept;
 	public:
