@@ -104,8 +104,14 @@ public:
 		Event getEvent() noexcept;
 		bool keyDown(uint8_t key) const;
 
-		void clearKeyStates() noexcept {keyStates = decltype(keyStates)();}
-		void clearEvents() noexcept {events = decltype(events)();}
+		void clearKeyStates() noexcept { keyStates = decltype(keyStates)(); }
+		void clearKeyState(uint8_t key) noexcept { keyStates[key] = false; }
+		void clearEvents() noexcept
+		{
+			events = decltype(events)();
+			getPos = 0;
+			setPos = 0;
+		}
 	} keyboard;
 	class Mouse
 	{
@@ -140,7 +146,12 @@ public:
 		int getX() {return x;}
 		int getY() {return y;}
 		
-		void clearEvents() noexcept {events = decltype(events)();}
+		void clearEvents() noexcept
+		{
+			events = decltype(events)();
+			getPos = 0;
+			setPos = 0;
+		}
 	} mouse;
 	DV2 dv2;
 

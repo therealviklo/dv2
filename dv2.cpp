@@ -482,9 +482,16 @@ void Texture::createTextureWithDecoder(IWICBitmapDecoder* decoder, ID3D11Device*
 		throw Exception("Failed to create texture view");
 }
 
-DV2::SwapChain::SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11DeviceContext* context, HWND hWnd)
-	: width(0),
-	  height(0)
+DV2::SwapChain::SwapChain(
+	IDXGISwapChain* swap,
+	ID3D11Device* device,
+	ID3D11DeviceContext* context,
+	HWND hWnd,
+	float desiredWidth,
+	float desiredHeight
+) :
+	width(0),
+	height(0)
 {
 	ComPtr<ID3D11Resource> backBuffer;
 	if (FAILED(swap->GetBuffer(
@@ -610,6 +617,31 @@ DV2::SwapChain::SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11Devi
 	vp.TopLeftY = 0;
 	context->RSSetViewports(1, &vp);
 
+	const float sizeScalingFactor = height / desiredHeight;
+	const D3D11_RECT scissorRect{
+		static_cast<LONG>((width - desiredWidth * sizeScalingFactor) / 2.0f),
+		0,
+		static_cast<LONG>((width + desiredWidth * sizeScalingFactor) / 2.0f),
+		static_cast<LONG>(height),
+	};
+	context->RSSetScissorRects(1, &scissorRect);
+
+	D3D11_RASTERIZER_DESC rasterizerDesc{};
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	rasterizerDesc.FrontCounterClockwise = FALSE;
+	rasterizerDesc.DepthBias = 0;
+	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	rasterizerDesc.DepthBiasClamp = 0.0f;
+	rasterizerDesc.DepthClipEnable = TRUE;
+	rasterizerDesc.ScissorEnable = TRUE;
+	rasterizerDesc.MultisampleEnable = FALSE;
+	rasterizerDesc.AntialiasedLineEnable = FALSE;
+	if (FAILED(device->CreateRasterizerState(&rasterizerDesc, &rasterizerState)))
+		throw Exception("Failed to create rasterizer state");
+
+	context->RSSetState(rasterizerState.Get());
+
 	D3D11_SAMPLER_DESC samplerDesc{};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -634,8 +666,10 @@ DV2::SwapChain::SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11Devi
 	context->OMSetBlendState(blendState.Get(), blendFactor, 0xffffffff);
 }
 
-DV2::DV2(HWND hWnd)
-	: hWnd(hWnd)
+DV2::DV2(HWND hWnd, float width, float height)
+	: hWnd(hWnd),
+	  desiredWidth(width),
+	  desiredHeight(height)
 {
 	DXGI_SWAP_CHAIN_DESC sd{};
 	sd.BufferDesc.Width = 0;
@@ -685,7 +719,7 @@ DV2::DV2(HWND hWnd)
 		dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_PRINT_SCREEN | DXGI_MWA_NO_WINDOW_CHANGES);
 	}
 
-	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd);
+	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd, desiredWidth, desiredHeight);
 
     if (FAILED(
         CoCreateInstance(
@@ -711,7 +745,7 @@ void DV2::resize()
 	swapChain.reset();
 	context->ClearState();
 	if (FAILED(swap->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0))) throw Exception("Failed to resize buffers");
-	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd);
+	swapChain.emplace(swap.Get(), device.Get(), context.Get(), hWnd, desiredWidth, desiredHeight);
 }
 
 void DV2::setFullscreen(bool on)
@@ -783,11 +817,17 @@ void DV2::draw(
 		DirectX::XMMATRIX texmtx;
 	} mtcs;
 
+	const float scalingFactor = desiredHeight / swapChain->height;
+
 	mtcs.mtx = DirectX::XMMatrixTranspose(
 		DirectX::XMMatrixScaling(width, height, 1.0f) *
 		DirectX::XMMatrixRotationZ(angle) *
-		DirectX::XMMatrixTranslation(x, y, 0.0f) *
-		DirectX::XMMatrixScaling(1.0f / swapChain->width, 1.0f / swapChain->height, 1.0f)
+		DirectX::XMMatrixTranslation(x * 2.0f, y * 2.0f, 0.0f) *
+		DirectX::XMMatrixScaling(
+			1.0f / scalingFactor / swapChain->width,
+			1.0f / scalingFactor / swapChain->height,
+			1.0f
+		)
 	);
 	mtcs.texmtx = DirectX::XMMatrixTranspose(
 		DirectX::XMMatrixScaling(srcWidth / texture.width, srcHeight / texture.height, 1.0f) *

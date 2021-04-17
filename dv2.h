@@ -66,6 +66,9 @@ public:
 private:
 	HWND hWnd;
 
+	float desiredWidth;
+	float desiredHeight;
+
 	ComPtr<IDXGISwapChain> swap;
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
@@ -84,15 +87,23 @@ private:
 		ComPtr<ID3D11VertexShader> vertexShader;
 		ComPtr<ID3D11InputLayout> inputLayout;
 		ComPtr<ID3D11BlendState> blendState;
+		ComPtr<ID3D11RasterizerState> rasterizerState;
 		ComPtr<ID3D11SamplerState> samplerState;
 
-		SwapChain(IDXGISwapChain* swap, ID3D11Device* device, ID3D11DeviceContext* context, HWND hWnd);
+		SwapChain(
+			IDXGISwapChain* swap,
+			ID3D11Device* device,
+			ID3D11DeviceContext* context,
+			HWND hWnd,
+			float desiredWidth,
+			float desiredHeight
+		);
 	};
 	std::optional<SwapChain> swapChain;
 	
 	ComPtr<IWICImagingFactory> wicFactory;
 public:
-	DV2(HWND hWnd);
+	DV2(HWND hWnd, float width, float height);
 	~DV2();
 
 	DV2(const DV2&) = delete;

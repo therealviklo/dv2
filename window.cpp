@@ -76,15 +76,21 @@ Window::Window(const wchar_t* title, int width, int height, bool resizeable)
 	  hWnd([&]{
 		if (!wndClass.succeeded) throw Exception("Failed to register window class");
 
+		const DWORD style = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | (resizeable ? WS_THICKFRAME | WS_MAXIMIZEBOX : 0);
+
+		RECT r{0, 0, width, height};
+		if (!AdjustWindowRect(&r, style, FALSE))
+			throw Exception("Failed to adjust window rectangle");
+
 		HWND hWnd = CreateWindowExW(
 			0,
 			WndClass::className,
 			title,
-			WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | (resizeable ? WS_THICKFRAME | WS_MAXIMIZEBOX : 0),
+			style,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
-			width,
-			height,
+			r.right - r.left,
+			r.bottom - r.top,
 			nullptr,
 			nullptr,
 			GetModuleHandleW(nullptr),
@@ -96,7 +102,7 @@ Window::Window(const wchar_t* title, int width, int height, bool resizeable)
 
 		return hWnd;
 	  }()),
-	  dv2(hWnd.get())
+	  dv2(hWnd.get(), width, height)
 {
 	dv2Created = true;
 }
