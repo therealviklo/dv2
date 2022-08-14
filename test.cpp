@@ -5,7 +5,7 @@
 
 #include "dv2.cpp"
 #include "window.cpp"
-#include "timer.cpp"
+//#include "timer.cpp"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {

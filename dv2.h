@@ -20,7 +20,7 @@ using Microsoft::WRL::ComPtr;
 /* Länka med:
    - user32
    - d3d11
-   - shlwapi*/
+   - shlwapi */
 
 struct Colour
 {
