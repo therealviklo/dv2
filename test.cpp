@@ -62,7 +62,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 				w.dv2.draw(
 					froody,
 					w.dv2.clientToDVX(w.mouse.getX()), w.dv2.clientToDVY(w.mouse.getY()),
-					k
+					k,
+					Colour{1.0f, 0.5f, 0.5f, 1.0f}
 				);
 
 			w.dv2.presentSync();

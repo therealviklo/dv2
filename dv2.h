@@ -82,6 +82,7 @@ private:
 		ComPtr<ID3D11RenderTargetView> target;
 		
 		ComPtr<ID3D11Buffer> vertexBuffer;
+		ComPtr<ID3D11Buffer> colourShiftBuffer;
 		ComPtr<ID3D11Buffer> matrixBuffer;
 		ComPtr<ID3D11PixelShader> pixelShader;
 		ComPtr<ID3D11VertexShader> vertexShader;
@@ -137,7 +138,8 @@ public:
 		float srcY,
 		float srcWidth,
 		float srcHeight,
-		float angle
+		float angle = 0.0f,
+		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
 	);
 	void draw(
 		Texture& texture,
@@ -145,26 +147,9 @@ public:
 		float y,
 		float width,
 		float height,
-		float srcX,
-		float srcY,
-		float srcWidth,
-		float srcHeight
-	) { draw(texture, x, y, width, height, srcX, srcY, srcWidth, srcHeight, 0.0f); }
-	void draw(
-		Texture& texture,
-		float x,
-		float y,
-		float width,
-		float height,
-		float angle
-	) { draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle); }
-	void draw(
-		Texture& texture,
-		float x,
-		float y,
-		float width,
-		float height
-	) { draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f); }
+		float angle = 0.0f,
+		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
+	) { draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle, clrShift); }
 	void draw(
 		Texture& texture,
 		float x,
@@ -173,28 +158,16 @@ public:
 		float srcY,
 		float srcWidth,
 		float srcHeight,
-		float angle
-	) { draw(texture, x, y, srcWidth, srcHeight, srcX, srcY, srcWidth, srcHeight, angle); }
+		float angle = 0.0f,
+		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
+	) { draw(texture, x, y, srcWidth, srcHeight, srcX, srcY, srcWidth, srcHeight, angle, clrShift); }
 	void draw(
 		Texture& texture,
 		float x,
 		float y,
-		float srcX,
-		float srcY,
-		float srcWidth,
-		float srcHeight
-	) { draw(texture, x, y, srcWidth, srcHeight, srcX, srcY, srcWidth, srcHeight, 0.0f); }
-	void draw(
-		Texture& texture,
-		float x,
-		float y,
-		float angle
-	) { draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle); }
-	void draw(
-		Texture& texture,
-		float x,
-		float y
-	) { draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), 0.0f); }
+		float angle = 0.0f,
+		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
+	) { draw(texture, x, y, texture.getWidth(), texture.getHeight(), 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle, clrShift); }
 
 	// Synkar med refreshraten.
 	void presentSync();
