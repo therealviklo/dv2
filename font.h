@@ -46,6 +46,6 @@ public:
 	float getTextWidth(const char* str, float height);
 	
 	// Returnerar bredden
-	float drawChar(DV2& dv2, char32_t c, float x, float y, float h, float angle = 0.0f);
-	void drawText(DV2& dv2, const char* str, float x, float y, float h, TextAlign align, float angle = 0.0f);
+	float drawChar(DV2& dv2, char32_t c, float x, float y, float h, float angle = 0.0f, Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f});
+	void drawText(DV2& dv2, const char* str, float x, float y, float h, TextAlign align, float angle = 0.0f, Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f});
 };

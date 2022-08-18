@@ -100,7 +100,7 @@ float Font::getTextWidth(const char* str, float height)
 	return getTextWidth(str32.c_str(), height);
 }
 
-float Font::drawChar(DV2& dv2, char32_t c, float x, float y, float h, float angle)
+float Font::drawChar(DV2& dv2, char32_t c, float x, float y, float h, float angle, Colour clrShift)
 {
 	if (spritesheets.contains(c >> 8u))
 	{
@@ -121,14 +121,15 @@ float Font::drawChar(DV2& dv2, char32_t c, float x, float y, float h, float angl
 			((c & 0xFFu) >> 4u) * charh,
 			charw,
 			charh,
-			angle
+			angle,
+			clrShift
 		);
 		return spacewidth;
 	}
 	return 0.0f;
 }
 
-void Font::drawText(DV2& dv2, const char* str, float x, float y, float h, TextAlign align, float angle)
+void Font::drawText(DV2& dv2, const char* str, float x, float y, float h, TextAlign align, float angle, Colour clrShift)
 {
 	std::u32string str32;
 	while (const char32_t c = readUtf8Char(str))
@@ -147,5 +148,5 @@ void Font::drawText(DV2& dv2, const char* str, float x, float y, float h, TextAl
 		break;
 	}
 	for (const auto& c : str32)
-		currx += drawChar(dv2, c, currx, y, h, angle);
+		currx += drawChar(dv2, c, currx, y, h, angle, clrShift);
 }
