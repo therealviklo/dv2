@@ -187,19 +187,19 @@ public:
 
 	float clientToDVX(float x) const noexcept
 	{
-		return x / swapChain->width * getEffectiveWidth();
+		return (x / swapChain->width - 0.5) * getEffectiveWidth();
 	}
 	float DVToClientX(float x) const noexcept
 	{
-		return x / getEffectiveWidth() * swapChain->width;
+		return (x / getEffectiveWidth() + 0.5) * swapChain->width;
 	}
 	float clientToDVY(float y) const noexcept
 	{
-		return -y / swapChain->height * getEffectiveHeight();
+		return -(y / swapChain->height - 0.5) * getEffectiveHeight();
 	}
 	float DVToClientY(float y) const noexcept
 	{
-		return -y / getEffectiveHeight() * swapChain->height;
+		return -(y / getEffectiveHeight() + 0.5) * swapChain->height;
 	}
 
 	static void changeScreenResolution(int width, int height);
