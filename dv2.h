@@ -176,21 +176,30 @@ public:
 	// Ingen synkning, visar direkt.
 	void presentNoSync();
 
+	float getEffectiveWidth() const noexcept
+	{
+		return swapChain->width * std::min(desiredWidth / swapChain->width, desiredHeight / swapChain->height);
+	}
+	float getEffectiveHeight() const noexcept
+	{
+		return swapChain->height * std::min(desiredWidth / swapChain->width, desiredHeight / swapChain->height);
+	}
+
 	float clientToDVX(float x) const noexcept
 	{
-		return (x - swapChain->width / 2.0f) * 2.0f;
+		return x / swapChain->width * getEffectiveWidth();
 	}
 	float DVToClientX(float x) const noexcept
 	{
-		return (x + swapChain->width / 2.0f) / 2.0f;
+		return x / getEffectiveWidth() * swapChain->width;
 	}
 	float clientToDVY(float y) const noexcept
 	{
-		return (swapChain->height / 2.0f - y) * 2.0f;
+		return -y / swapChain->height * getEffectiveHeight();
 	}
 	float DVToClientY(float y) const noexcept
 	{
-		return (-swapChain->height / 2.0f - y) / 2.0f;
+		return -y / getEffectiveHeight() * swapChain->height;
 	}
 
 	static void changeScreenResolution(int width, int height);

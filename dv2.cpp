@@ -644,7 +644,7 @@ DV2::SwapChain::SwapChain(
 	vp.TopLeftY = 0;
 	context->RSSetViewports(1, &vp);
 
-	const float sizeScalingFactor = height / desiredHeight;
+	const float sizeScalingFactor = std::max(width / desiredWidth, height / desiredHeight);
 	const D3D11_RECT scissorRect{
 		static_cast<LONG>((width - desiredWidth * sizeScalingFactor) / 2.0f),
 		0,
@@ -850,7 +850,7 @@ void DV2::draw(
 		DirectX::XMMATRIX texmtx;
 	} mtcs;
 
-	const float scalingFactor = desiredHeight / swapChain->height;
+	const float scalingFactor = std::min(desiredWidth / swapChain->width, desiredHeight / swapChain->height);
 
 	mtcs.mtx = DirectX::XMMatrixTranspose(
 		DirectX::XMMatrixScaling(width, height, 1.0f) *
