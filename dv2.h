@@ -129,7 +129,7 @@ public:
 	void clear(Colour clr);
 
 	void draw(
-		Texture& texture,
+		const Texture& texture,
 		float x,
 		float y,
 		float width,
@@ -142,7 +142,7 @@ public:
 		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
 	);
 	void draw(
-		Texture& texture,
+		const Texture& texture,
 		float x,
 		float y,
 		float width,
@@ -151,7 +151,7 @@ public:
 		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
 	) { draw(texture, x, y, width, height, 0.0f, 0.0f, texture.getWidth(), texture.getHeight(), angle, clrShift); }
 	void draw(
-		Texture& texture,
+		const Texture& texture,
 		float x,
 		float y,
 		float srcX,
@@ -162,7 +162,7 @@ public:
 		Colour clrShift = Colour{1.0f, 1.0f, 1.0f, 1.0f}
 	) { draw(texture, x, y, srcWidth, srcHeight, srcX, srcY, srcWidth, srcHeight, angle, clrShift); }
 	void draw(
-		Texture& texture,
+		const Texture& texture,
 		float x,
 		float y,
 		float angle = 0.0f,

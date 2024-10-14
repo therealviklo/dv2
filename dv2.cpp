@@ -826,7 +826,7 @@ void DV2::clear(Colour clr)
 }
 
 void DV2::draw(
-	Texture& texture,
+	const Texture& texture,
 	float x,
 	float y,
 	float width,
