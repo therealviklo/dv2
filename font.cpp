@@ -95,7 +95,7 @@ float Font::getTextWidth(const char32_t* str, float height)
 float Font::getTextWidth(const char* str, float height)
 {
 	std::u32string str32;
-	while (const char c = readUtf8Char(str))
+	while (const char32_t c = readUtf8Char(str))
 		str32 += c;
 	return getTextWidth(str32.c_str(), height);
 }
